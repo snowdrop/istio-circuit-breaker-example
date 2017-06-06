@@ -126,8 +126,10 @@
             $("#toggle").click(function(e) {
                 var newState = $("#name-state").html().indexOf("FAIL") != -1 ? "ok" : "fail";
                 $.ajax({
-                    url: nameServiceUrlBase + "/api/state?state=" + newState,
-                    type: 'GET'
+                    url: nameServiceUrlBase + "/api/state",
+                    type: 'PUT',
+                    headers: {"Content-Type" : "application/json"},
+                    data: JSON.stringify({state:newState}),
                 });
                 e.preventDefault();
             });

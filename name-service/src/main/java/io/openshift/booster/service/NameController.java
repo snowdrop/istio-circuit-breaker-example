@@ -30,6 +30,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -49,7 +50,8 @@ public class NameController {
 
     private static final Logger LOG = LoggerFactory.getLogger(NameController.class);
 
-    private final String hostName = System.getenv("HOSTNAME");
+    private static final String theName = System.getenv("HOSTNAME") != null ? System.getenv("HOSTNAME") : "World";
+
     private final AtomicBoolean doFail = new AtomicBoolean();
     private final NameServiceWebSockerHandler handler = new NameServiceWebSockerHandler();
 
@@ -63,8 +65,8 @@ public class NameController {
         if (doFail.get()) {
             return new ResponseEntity<>("Name service down", HttpStatus.INTERNAL_SERVER_ERROR);
         } else {
-            LOG.info(String.format("Returning a name '%s'", this.hostName));
-            return new ResponseEntity<>(this.hostName, HttpStatus.OK);
+            LOG.info(String.format("Returning a name '%s'", theName));
+            return new ResponseEntity<>(theName, HttpStatus.OK);
         }
     }
 
@@ -72,18 +74,19 @@ public class NameController {
      * Set name service state - via GET.
      */
     @GetMapping("/api/state")
-    public void applyState(@RequestParam(name = "state") String state) throws Exception {
+    public StateInfo applyState(@RequestParam(name = "state") String state) throws Exception {
         doFail.set("fail".equalsIgnoreCase(state));
         LOG.info("Name service state set to " + state);
         handler.sendMessage();
+        return getState();
     }
 
     /**
      * Set name service state - via PUT.
      */
     @PutMapping("/api/state")
-    public void applyState(StateInfo info) throws Exception {
-        applyState(info.getState());
+    public StateInfo applyState(@RequestBody StateInfo info) throws Exception {
+        return applyState(info.getState());
     }
 
     /**

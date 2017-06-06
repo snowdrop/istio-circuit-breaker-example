@@ -33,7 +33,7 @@
 
     <properties>
         <springboot.version>1.4.1.RELEASE</springboot.version>
-        <arquillian.version>1.1.12.Final</arquillian.version>
+        <junit.version>4.12</junit.version>
     </properties>
 
     <modules>
@@ -64,9 +64,9 @@
             </dependency>
 
             <dependency>
-                <groupId>org.jboss.arquillian.junit</groupId>
-                <artifactId>arquillian-junit-container</artifactId>
-                <version>${arquillian.version}</version>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${junit.version}</version>
                 <scope>test</scope>
             </dependency>
         </dependencies>
