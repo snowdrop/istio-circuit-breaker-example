@@ -16,6 +16,7 @@
 
 package io.openshift.booster.service;
 
+import com.netflix.hystrix.HystrixCircuitBreaker;
 import com.netflix.hystrix.HystrixCommandKey;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
@@ -28,7 +29,7 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class NameService {
 
-    static final HystrixCommandKey KEY = HystrixCommandKey.Factory.asKey("NameService");
+    private static final HystrixCommandKey KEY = HystrixCommandKey.Factory.asKey("NameService");
 
     private final String nameHost = System.getProperty("name.host", "http://springboot-cb-name");
     private final RestTemplate restTemplate = new RestTemplate();
@@ -44,4 +45,8 @@ public class NameService {
         return "Fallback";
     }
 
+    static CircuitBreakerState getState() throws Exception {
+        HystrixCircuitBreaker circuitBreaker = HystrixCircuitBreaker.Factory.getInstance(KEY);
+        return circuitBreaker != null && circuitBreaker.isOpen() ? CircuitBreakerState.OPEN : CircuitBreakerState.CLOSED;
+    }
 }

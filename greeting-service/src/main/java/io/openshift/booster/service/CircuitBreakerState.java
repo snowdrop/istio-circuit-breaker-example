@@ -16,18 +16,26 @@
 
 package io.openshift.booster.service;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 /**
- * Circuit Breaker state controller.
+ * Circuit Breaker state.
  */
-@RestController
-public class CircuitBreakerController {
+public class CircuitBreakerState {
 
-    @RequestMapping("/api/cb-state")
-    public CircuitBreakerState getState() throws Exception {
-        return NameService.getState();
+    static final CircuitBreakerState OPEN = new CircuitBreakerState("open");
+    static final CircuitBreakerState CLOSED = new CircuitBreakerState("closed");
+
+    private String state;
+
+    public CircuitBreakerState() {
+    }
+
+    public CircuitBreakerState(String state) {
+        this.state = state;
+    }
+
+    public String getState() {
+        return state;
     }
 
 }
+

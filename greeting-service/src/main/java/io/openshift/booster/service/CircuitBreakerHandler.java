@@ -19,7 +19,6 @@ package io.openshift.booster.service;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import com.netflix.hystrix.HystrixCircuitBreaker;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketHandler;
@@ -33,13 +32,8 @@ public class CircuitBreakerHandler implements WebSocketHandler {
 
     private Queue<WebSocketSession> currentSessions = new ConcurrentLinkedQueue<>();
 
-    static CircuitBreakerState getState() throws Exception {
-        HystrixCircuitBreaker circuitBreaker = HystrixCircuitBreaker.Factory.getInstance(NameService.KEY);
-        return circuitBreaker != null && circuitBreaker.isOpen() ? CircuitBreakerState.OPEN : CircuitBreakerState.CLOSED;
-    }
-
     void sendMessage() throws Exception {
-        TextMessage message = new TextMessage("isOpen:" + CircuitBreakerState.OPEN.equals(getState()));
+        TextMessage message = new TextMessage("isOpen:" + CircuitBreakerState.OPEN.equals(NameService.getState()));
         for (WebSocketSession session : currentSessions) {
             session.sendMessage(message);
         }
@@ -62,25 +56,5 @@ public class CircuitBreakerHandler implements WebSocketHandler {
 
     public boolean supportsPartialMessages() {
         return false;
-    }
-
-    static class CircuitBreakerState {
-
-        static final CircuitBreakerState OPEN = new CircuitBreakerState("open");
-        static final CircuitBreakerState CLOSED = new CircuitBreakerState("closed");
-
-        private String state;
-
-        public CircuitBreakerState() {
-        }
-
-        public CircuitBreakerState(String state) {
-            this.state = state;
-        }
-
-        public String getState() {
-            return state;
-        }
-
     }
 }
