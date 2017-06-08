@@ -1,0 +1,1 @@
+Quickstart to demonstrate Circuit Breaker pattern with Spring Boot.
