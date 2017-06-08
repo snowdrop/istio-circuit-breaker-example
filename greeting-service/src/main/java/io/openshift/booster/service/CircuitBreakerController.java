@@ -25,9 +25,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class CircuitBreakerController {
 
+    private NameService nameService;
+
+    public CircuitBreakerController(NameService nameService) {
+        this.nameService = nameService;
+    }
+
     @RequestMapping("/api/cb-state")
     public CircuitBreakerState getState() throws Exception {
-        return NameService.getState();
+        return nameService.getState();
     }
 
 }

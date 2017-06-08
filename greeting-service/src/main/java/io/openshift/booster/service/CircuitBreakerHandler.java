@@ -32,8 +32,8 @@ public class CircuitBreakerHandler implements WebSocketHandler {
 
     private Queue<WebSocketSession> currentSessions = new ConcurrentLinkedQueue<>();
 
-    void sendMessage() throws Exception {
-        TextMessage message = new TextMessage("isOpen:" + CircuitBreakerState.OPEN.equals(NameService.getState()));
+    void sendMessage(CircuitBreakerState state) throws Exception {
+        TextMessage message = new TextMessage("isOpen:" + CircuitBreakerState.OPEN.equals(state));
         for (WebSocketSession session : currentSessions) {
             session.sendMessage(message);
         }

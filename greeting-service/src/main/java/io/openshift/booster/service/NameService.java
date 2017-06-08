@@ -38,14 +38,14 @@ public class NameService {
             @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "1000")
     })
     public String getName() {
-        return this.restTemplate.getForObject(nameHost + "/api/name", String.class);
+        return restTemplate.getForObject(nameHost + "/api/name", String.class);
     }
 
     private String getFallbackName() {
         return "Fallback";
     }
 
-    static CircuitBreakerState getState() throws Exception {
+    CircuitBreakerState getState() throws Exception {
         HystrixCircuitBreaker circuitBreaker = HystrixCircuitBreaker.Factory.getInstance(KEY);
         return circuitBreaker != null && circuitBreaker.isOpen() ? CircuitBreakerState.OPEN : CircuitBreakerState.CLOSED;
     }
