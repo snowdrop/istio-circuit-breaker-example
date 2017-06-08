@@ -20,7 +20,7 @@
     <parent>
       <groupId>io.openshift</groupId>
       <artifactId>booster-parent</artifactId>
-      <version>4</version>
+      <version>5</version>
     </parent>
 
     <groupId>io.openshift.booster</groupId>
@@ -34,11 +34,13 @@
     <properties>
         <springboot.version>1.4.1.RELEASE</springboot.version>
         <junit.version>4.12</junit.version>
+        <org.glassfish.javax.json>1.0.3</org.glassfish.javax.json>
     </properties>
 
     <modules>
         <module>greeting-service</module>
         <module>name-service</module>
+        <module>tests</module>
     </modules>
 
     <build>
@@ -67,6 +69,13 @@
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
                 <version>${junit.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.glassfish</groupId>
+                <artifactId>javax.json</artifactId>
+                <version>${org.glassfish.javax.json}</version>
                 <scope>test</scope>
             </dependency>
         </dependencies>

@@ -44,7 +44,7 @@ public class GreetingController {
      */
     @RequestMapping("/api/greeting")
     public Greeting getGreeting() throws Exception {
-        String result = String.format("Hello from %s!", this.nameService.getName());
+        String result = String.format("Hello, %s!", this.nameService.getName());
         handler.sendMessage();
         return new Greeting(result);
     }

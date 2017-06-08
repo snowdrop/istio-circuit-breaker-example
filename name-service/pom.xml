@@ -18,7 +18,7 @@
     <version>1-SNAPSHOT</version>
   </parent>
 
-  <artifactId>springboot-circuit-breaker-name</artifactId>
+  <artifactId>springboot-cb-name</artifactId>
 
   <name>Spring Boot - C/B Booster - Name Service</name>
 
@@ -49,6 +49,25 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <configuration>
+          <classifier>exec</classifier>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>repackage</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
 
   <profiles>
     <profile>

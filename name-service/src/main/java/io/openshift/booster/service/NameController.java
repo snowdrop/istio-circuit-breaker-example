@@ -50,7 +50,7 @@ public class NameController {
 
     private static final Logger LOG = LoggerFactory.getLogger(NameController.class);
 
-    private static final String theName = System.getenv("HOSTNAME") != null ? System.getenv("HOSTNAME") : "World";
+    private static final String theName = "World";
 
     private final AtomicBoolean doFail = new AtomicBoolean();
     private final NameServiceWebSockerHandler handler = new NameServiceWebSockerHandler();

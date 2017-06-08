@@ -3,4 +3,4 @@
 *.ipr
 greeting-service/target/
 name-service/target/
-
+tests/target
