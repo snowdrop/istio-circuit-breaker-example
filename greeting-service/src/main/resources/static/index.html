@@ -84,7 +84,8 @@
             crossorigin="anonymous"></script>
 
     <script>
-        var nameServiceUrlBase = "http://localhost:8081";//window.location.origin.replace("springboot-circuit-breaker-greeting", "springboot-circuit-breaker-name");
+        var currentLocation = window.location.origin;
+        var nameServiceUrlBase = currentLocation.indexOf("localhost") !== -1 ? "http://localhost:8081" : currentLocation.replace("springboot-cb-greeting", "springboot-cb-name");
 
         function initCircuitState() {
             $.getJSON("/api/cb-state", function(res) {
