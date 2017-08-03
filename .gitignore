@@ -1,6 +1,4 @@
 .idea/
 *.iml
 *.ipr
-greeting-service/target/
-name-service/target/
-tests/target
+target
