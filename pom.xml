@@ -33,7 +33,7 @@
 
     <properties>
         <springboot.version>1.4.1.RELEASE</springboot.version>
-        <spring-boot.bom.version>2</spring-boot.bom.version>
+        <spring-boot.bom.version>1.4.1-SNAPSHOT</spring-boot.bom.version>
         <junit.version>4.12</junit.version>
         <org.glassfish.javax.json>1.0.3</org.glassfish.javax.json>
     </properties>
@@ -59,8 +59,8 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>org.jboss.snowdrop</groupId>
-                <artifactId>spring-boot-1.4-bom</artifactId>
+                <groupId>me.snowdrop</groupId>
+                <artifactId>spring-boot-bom</artifactId>
                 <version>${spring-boot.bom.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
