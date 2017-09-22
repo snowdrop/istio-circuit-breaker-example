@@ -32,8 +32,8 @@
     <description>Spring Boot - Circuit Breaker</description>
 
     <properties>
-        <springboot.version>1.4.1.RELEASE</springboot.version>
-        <spring-boot.bom.version>1.4.1.Beta1</spring-boot.bom.version>
+        <springboot.version>1.5.7.RELEASE</springboot.version>
+        <spring-boot.bom.version>1.5.7-SNAPSHOT</spring-boot.bom.version>
         <junit.version>4.12</junit.version>
         <org.glassfish.javax.json>1.0.3</org.glassfish.javax.json>
     </properties>
