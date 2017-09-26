@@ -44,7 +44,7 @@ objects:
 - apiVersion: v1
   kind: ImageStream
   metadata:
-    name: runtime
+    name: runtime-greeting
   spec:
     tags:
     - name: latest
@@ -72,7 +72,7 @@ objects:
       sourceStrategy:
         from:
           kind: ImageStreamTag
-          name: runtime:latest
+          name: runtime-greeting:latest
         env:
         - name: MAVEN_ARGS_APPEND
           value: "-pl ${SOURCE_REPOSITORY_DIR}"
