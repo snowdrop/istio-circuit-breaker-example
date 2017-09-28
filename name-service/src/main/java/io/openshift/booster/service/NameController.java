@@ -17,6 +17,7 @@
 package io.openshift.booster.service;
 
 import java.io.IOException;
+import java.time.LocalTime;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -61,7 +62,9 @@ public class NameController {
      * @return Host name.
      */
     @RequestMapping("/api/name")
-    public ResponseEntity<String> getName() {
+    public ResponseEntity<String> getName() throws IOException {
+        handler.sendMessage("GET /api/name at " + LocalTime.now());
+
         if (doFail.get()) {
             return new ResponseEntity<>("Name service down", HttpStatus.INTERNAL_SERVER_ERROR);
         } else {
@@ -77,7 +80,7 @@ public class NameController {
     public StateInfo applyState(@RequestParam(name = "state") String state) throws Exception {
         doFail.set("fail".equalsIgnoreCase(state));
         LOG.info("Name service state set to " + state);
-        handler.sendMessage();
+        handler.sendMessage("state:" + !doFail.get());
         return getState();
     }
 
@@ -136,10 +139,10 @@ public class NameController {
     private class NameServiceWebSockerHandler implements WebSocketHandler {
         private Queue<WebSocketSession> currentSessions = new ConcurrentLinkedQueue<>();
 
-        void sendMessage() throws IOException {
-            TextMessage message = new TextMessage("state:" + !doFail.get());
+        void sendMessage(String message) throws IOException {
+            TextMessage textMessage = new TextMessage(message);
             for (WebSocketSession session : currentSessions) {
-                session.sendMessage(message);
+                session.sendMessage(textMessage);
             }
         }
 

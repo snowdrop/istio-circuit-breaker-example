@@ -162,7 +162,7 @@
                     updateNameServiceState(false);
                 } else {
                     // Request accepted
-                    $("#name-requests").prepend("GET /name at " + evt.data + "\n");
+                    $("#name-requests").prepend(evt.data + "\n");
                 }
             }
             window.addEventListener("load", connect, false);
