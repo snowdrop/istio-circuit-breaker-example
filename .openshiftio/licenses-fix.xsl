@@ -29,6 +29,9 @@
   <xsl:variable name="cc0_name" select="'Creative Commons Zero v1.0 Universal'"/>
   <xsl:variable name="cc0_url" select="'http://creativecommons.org/publicdomain/zero/1.0/legalcode'"/>
 
+  <xsl:variable name="cddl_11_gpl2_name" select="'Common Development and Distribution License (CDDL) v1.1 and GNU Public License v.2'"/>
+  <xsl:variable name="cddl_11_gpl2_url" select="'https://oss.oracle.com/licenses/CDDL+GPL-1.1'"/>
+
   <xsl:template match="@*|node()">
     <xsl:copy>
       <xsl:apply-templates select="@*|node()"/>
@@ -97,6 +100,12 @@
         <xsl:call-template name="license">
           <xsl:with-param name="name" select="$cc0_name"/>
           <xsl:with-param name="url" select="$cc0_url"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:when test="contains(translate(., $uppercase, $lowercase), 'glassfish.java.net/public/cddl+gpl_1_1.html')">
+        <xsl:call-template name="license">
+          <xsl:with-param name="name" select="$cddl_11_gpl2_name"/>
+          <xsl:with-param name="url" select="$cddl_11_gpl2_url"/>
         </xsl:call-template>
       </xsl:when>
       <!-- If nothing matches, leave original values -->
