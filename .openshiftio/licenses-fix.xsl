@@ -29,7 +29,7 @@
   <xsl:variable name="cc0_name" select="'Creative Commons Zero v1.0 Universal'"/>
   <xsl:variable name="cc0_url" select="'http://creativecommons.org/publicdomain/zero/1.0/legalcode'"/>
 
-  <xsl:variable name="cddl_11_gpl2_name" select="'Common Development and Distribution License (CDDL) v1.1 and GNU Public License v.2'"/>
+  <xsl:variable name="cddl_11_gpl2_name" select="'Dual license consisting of the CDDL v1.1 and GPL v2'"/>
   <xsl:variable name="cddl_11_gpl2_url" select="'https://oss.oracle.com/licenses/CDDL+GPL-1.1'"/>
 
   <xsl:template match="@*|node()">
