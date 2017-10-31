@@ -15,7 +15,7 @@
   <parent>
     <groupId>io.openshift.booster</groupId>
     <artifactId>springboot-circuit-breaker-parent</artifactId>
-    <version>7</version>
+    <version>8-SNAPSHOT</version>
   </parent>
 
   <artifactId>springboot-cb-greeting</artifactId>
