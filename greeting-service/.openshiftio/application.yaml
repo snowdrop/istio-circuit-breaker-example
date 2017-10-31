@@ -59,7 +59,7 @@ objects:
     output:
       to:
         kind: ImageStreamTag
-        name: springboot-cb-greeting:latest
+        name: springboot-cb-greeting:7
     postCommit: {}
     resources: {}
     source:
@@ -73,6 +73,7 @@ objects:
         from:
           kind: ImageStreamTag
           name: runtime-greeting:latest
+        incremental: true
         env:
         - name: MAVEN_ARGS_APPEND
           value: "-pl ${SOURCE_REPOSITORY_DIR}"
@@ -103,12 +104,12 @@ objects:
       fabric8.io/git-branch: sb-1.5.x
       prometheus.io/scrape: "true"
       fabric8.io/scm-devcon-url: scm:git:git:@github.com:openshiftio/booster-parent.git/springboot-circuit-breaker-parent/springboot-cb-greeting
-      fabric8.io/scm-tag: booster-parent-10
+      fabric8.io/scm-tag: booster-parent-11
     labels:
       expose: "true"
       app: springboot-cb-greeting
       provider: fabric8
-      version: 5-SNAPSHOT
+      version: "7"
       group: io.openshift.booster
     name: springboot-cb-greeting
   spec:
@@ -125,17 +126,17 @@ objects:
   kind: DeploymentConfig
   metadata:
     annotations:
-      fabric8.io/metrics-path: dashboard/file/kubernetes-pods.json/?var-project=springboot-cb-greeting&var-version=5-SNAPSHOT
+      fabric8.io/metrics-path: dashboard/file/kubernetes-pods.json/?var-project=springboot-cb-greeting&var-version=7
       fabric8.io/scm-con-url: scm:git:https://github.com/openshiftio/booster-parent.git/springboot-circuit-breaker-parent/springboot-cb-greeting
       fabric8.io/scm-url: https://github.com/openshiftio/springboot-circuit-breaker-parent/springboot-cb-greeting
       fabric8.io/iconUrl: img/icons/spring-boot.svg
       fabric8.io/git-branch: sb-1.5.x
       fabric8.io/scm-devcon-url: scm:git:git:@github.com:openshiftio/booster-parent.git/springboot-circuit-breaker-parent/springboot-cb-greeting
-      fabric8.io/scm-tag: booster-parent-10
+      fabric8.io/scm-tag: booster-parent-11
     labels:
       app: springboot-cb-greeting
       provider: fabric8
-      version: 5-SNAPSHOT
+      version: "7"
       group: io.openshift.booster
     name: springboot-cb-greeting
   spec:
@@ -152,17 +153,17 @@ objects:
     template:
       metadata:
         annotations:
-          fabric8.io/metrics-path: dashboard/file/kubernetes-pods.json/?var-project=springboot-cb-greeting&var-version=5-SNAPSHOT
+          fabric8.io/metrics-path: dashboard/file/kubernetes-pods.json/?var-project=springboot-cb-greeting&var-version=7
           fabric8.io/scm-con-url: scm:git:https://github.com/openshiftio/booster-parent.git/springboot-circuit-breaker-parent/springboot-cb-greeting
           fabric8.io/scm-url: https://github.com/openshiftio/springboot-circuit-breaker-parent/springboot-cb-greeting
           fabric8.io/iconUrl: img/icons/spring-boot.svg
           fabric8.io/git-branch: sb-1.5.x
           fabric8.io/scm-devcon-url: scm:git:git:@github.com:openshiftio/booster-parent.git/springboot-circuit-breaker-parent/springboot-cb-greeting
-          fabric8.io/scm-tag: booster-parent-10
+          fabric8.io/scm-tag: booster-parent-11
         labels:
           app: springboot-cb-greeting
           provider: fabric8
-          version: 5-SNAPSHOT
+          version: "7"
           group: io.openshift.booster
       spec:
         containers:
@@ -171,7 +172,7 @@ objects:
             valueFrom:
               fieldRef:
                 fieldPath: metadata.namespace
-          image: springboot-cb-greeting:latest
+          image: springboot-cb-greeting:7
           imagePullPolicy: IfNotPresent
           livenessProbe:
             httpGet:
@@ -206,7 +207,7 @@ objects:
         - spring-boot
         from:
           kind: ImageStreamTag
-          name: springboot-cb-greeting:latest
+          name: springboot-cb-greeting:7
       type: ImageChange
 - apiVersion: v1
   kind: Route
@@ -214,7 +215,7 @@ objects:
     labels:
       app: springboot-cb-greeting
       provider: fabric8
-      version: 5-SNAPSHOT
+      version: "7"
       group: io.openshift.booster
     name: springboot-cb-greeting
   spec:
