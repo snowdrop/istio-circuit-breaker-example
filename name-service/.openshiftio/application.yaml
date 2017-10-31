@@ -59,7 +59,7 @@ objects:
     output:
       to:
         kind: ImageStreamTag
-        name: springboot-cb-name:7
+        name: springboot-cb-name:8
     postCommit: {}
     resources: {}
     source:
@@ -109,7 +109,7 @@ objects:
       expose: "true"
       app: springboot-cb-name
       provider: fabric8
-      version: "7"
+      version: "8"
       group: io.openshift.booster
     name: springboot-cb-name
   spec:
@@ -126,7 +126,7 @@ objects:
   kind: DeploymentConfig
   metadata:
     annotations:
-      fabric8.io/metrics-path: dashboard/file/kubernetes-pods.json/?var-project=springboot-cb-name&var-version=7
+      fabric8.io/metrics-path: dashboard/file/kubernetes-pods.json/?var-project=springboot-cb-name&var-version=8
       fabric8.io/scm-con-url: scm:git:https://github.com/openshiftio/booster-parent.git/springboot-circuit-breaker-parent/springboot-cb-name
       fabric8.io/scm-url: https://github.com/openshiftio/springboot-circuit-breaker-parent/springboot-cb-name
       fabric8.io/iconUrl: img/icons/spring-boot.svg
@@ -136,7 +136,7 @@ objects:
     labels:
       app: springboot-cb-name
       provider: fabric8
-      version: "7"
+      version: "8"
       group: io.openshift.booster
     name: springboot-cb-name
   spec:
@@ -153,7 +153,7 @@ objects:
     template:
       metadata:
         annotations:
-          fabric8.io/metrics-path: dashboard/file/kubernetes-pods.json/?var-project=springboot-cb-name&var-version=7
+          fabric8.io/metrics-path: dashboard/file/kubernetes-pods.json/?var-project=springboot-cb-name&var-version=8
           fabric8.io/scm-con-url: scm:git:https://github.com/openshiftio/booster-parent.git/springboot-circuit-breaker-parent/springboot-cb-name
           fabric8.io/scm-url: https://github.com/openshiftio/springboot-circuit-breaker-parent/springboot-cb-name
           fabric8.io/iconUrl: img/icons/spring-boot.svg
@@ -163,7 +163,7 @@ objects:
         labels:
           app: springboot-cb-name
           provider: fabric8
-          version: "7"
+          version: "8"
           group: io.openshift.booster
       spec:
         containers:
@@ -172,7 +172,7 @@ objects:
             valueFrom:
               fieldRef:
                 fieldPath: metadata.namespace
-          image: springboot-cb-name:7
+          image: springboot-cb-name:8
           imagePullPolicy: IfNotPresent
           livenessProbe:
             httpGet:
@@ -207,7 +207,7 @@ objects:
         - spring-boot
         from:
           kind: ImageStreamTag
-          name: springboot-cb-name:7
+          name: springboot-cb-name:8
       type: ImageChange
 - apiVersion: v1
   kind: Route
@@ -215,7 +215,7 @@ objects:
     labels:
       app: springboot-cb-name
       provider: fabric8
-      version: "7"
+      version: "8"
       group: io.openshift.booster
     name: springboot-cb-name
   spec:
