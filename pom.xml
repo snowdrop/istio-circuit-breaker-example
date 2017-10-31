@@ -33,7 +33,7 @@
 
     <properties>
         <springboot.version>1.5.8.RELEASE</springboot.version>
-        <spring-boot.bom.version>1.5.8.Beta2</spring-boot.bom.version>
+        <spring-boot.bom.version>1.5.8.Final</spring-boot.bom.version>
         <junit.version>4.12</junit.version>
         <org.glassfish.javax.json>1.0.3</org.glassfish.javax.json>
     </properties>
