@@ -28,14 +28,14 @@
 
         <dependency>
             <groupId>io.openshift.booster</groupId>
-            <artifactId>springboot-cb-name</artifactId>
+            <artifactId>spring-boot-circuit-breaker-name</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>io.openshift.booster</groupId>
-            <artifactId>springboot-cb-greeting</artifactId>
+            <artifactId>spring-boot-circuit-breaker-greeting</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>

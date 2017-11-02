@@ -29,8 +29,8 @@ import static org.hamcrest.core.IsEqual.equalTo;
  * @author Radek Koubsky
  */
 public class OpenShiftIT {
-    private static final String NAME_SERVICE_APP = "springboot-cb-name";
-    private static final String GREETING_SERVICE_APP = "springboot-cb-greeting";
+    private static final String NAME_SERVICE_APP = "spring-boot-circuit-breaker-name";
+    private static final String GREETING_SERVICE_APP = "spring-boot-circuit-breaker-greeting";
 
     private static final String OK = "ok";
     private static final String FAIL = "fail";

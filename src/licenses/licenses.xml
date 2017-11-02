@@ -440,7 +440,7 @@
     </dependency>
     <dependency>
       <groupId>io.openshift.booster</groupId>
-      <artifactId>springboot-cb-greeting</artifactId>
+      <artifactId>spring-boot-circuit-breaker-greeting</artifactId>
       <version>5-SNAPSHOT</version>
       <licenses>
         <license>
@@ -451,7 +451,7 @@
     </dependency>
     <dependency>
       <groupId>io.openshift.booster</groupId>
-      <artifactId>springboot-cb-name</artifactId>
+      <artifactId>spring-boot-circuit-breaker-name</artifactId>
       <version>5-SNAPSHOT</version>
       <licenses>
         <license>

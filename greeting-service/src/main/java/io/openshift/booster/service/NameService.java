@@ -31,7 +31,7 @@ public class NameService {
 
     private static final HystrixCommandKey KEY = HystrixCommandKey.Factory.asKey("NameService");
 
-    private final String nameHost = System.getProperty("name.host", "http://springboot-cb-name:8080");
+    private final String nameHost = System.getProperty("name.host", "http://spring-boot-circuit-breaker-name:8080");
     private final RestTemplate restTemplate = new RestTemplate();
 
     @HystrixCommand(commandKey = "NameService", fallbackMethod = "getFallbackName", commandProperties = {
