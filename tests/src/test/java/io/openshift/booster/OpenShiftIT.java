@@ -4,6 +4,7 @@ import static com.jayway.awaitility.Awaitility.await;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.core.IsEqual.equalTo;
 
+import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
 import javax.json.Json;
@@ -12,6 +13,7 @@ import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.response.Response;
 import org.arquillian.cube.openshift.impl.enricher.RouteURL;
 import org.jboss.arquillian.junit.Arquillian;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -33,11 +35,23 @@ public class OpenShiftIT {
     // See also circuitBreaker.requestVolumeThreshold
     private static final long REQUEST_THRESHOLD = 3;
 
-    @RouteURL("springboot-cb-name")
-    private String nameBaseUri;
+    @RouteURL("spring-boot-circuit-breaker-name")
+    private URL nameBaseUri;
 
-    @RouteURL("springboot-cb-greeting")
-    private String greetingBaseUri;
+    @RouteURL("spring-boot-circuit-breaker-greeting")
+    private URL greetingBaseUri;
+
+    @Before
+    public void setup() {
+        await().pollInterval(1, TimeUnit.SECONDS).atMost(5, TimeUnit.MINUTES).until(() -> {
+            try {
+                return RestAssured.get(greetingBaseUri).getStatusCode() == 200
+                        && RestAssured.get(nameBaseUri + "api/info").getStatusCode() == 200;
+            } catch (Exception ignored) {
+                return false;
+            }
+        });
+    }
 
     @Test
     public void testCircuitBreaker() throws InterruptedException {
@@ -58,7 +72,7 @@ public class OpenShiftIT {
     }
 
     private Response greetingResponse() {
-        return RestAssured.when().get(greetingBaseUri + "/api/greeting");
+        return RestAssured.when().get(greetingBaseUri + "api/greeting");
     }
 
     private void assertGreeting(String expected) {
@@ -73,7 +87,7 @@ public class OpenShiftIT {
     }
 
     private Response circuitBreakerResponse() {
-        return RestAssured.when().get(greetingBaseUri + "/api/cb-state");
+        return RestAssured.when().get(greetingBaseUri + "api/cb-state");
     }
 
     private void assertCircuitBreaker(String expectedState) {
@@ -89,7 +103,7 @@ public class OpenShiftIT {
 
     private void changeNameServiceState(String state) {
         Response response = RestAssured.given().header("Content-type", "application/json")
-                .body(Json.createObjectBuilder().add("state", state).build().toString()).put(nameBaseUri + "/api/state");
+                .body(Json.createObjectBuilder().add("state", state).build().toString()).put(nameBaseUri + "api/state");
         response.then().assertThat().statusCode(200).body("state", equalTo(state));
     }
 }
