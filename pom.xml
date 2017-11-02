@@ -25,7 +25,7 @@
 
     <groupId>io.openshift.booster</groupId>
     <artifactId>spring-boot-circuit-breaker-parent</artifactId>
-    <version>9</version>
+    <version>10-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Spring Boot - Circuit Breaker Booster</name>
