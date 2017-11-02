@@ -14,13 +14,13 @@
 
   <parent>
     <groupId>io.openshift.booster</groupId>
-    <artifactId>springboot-circuit-breaker-parent</artifactId>
+    <artifactId>spring-boot-circuit-breaker-parent</artifactId>
     <version>9-SNAPSHOT</version>
   </parent>
 
-  <artifactId>springboot-cb-greeting</artifactId>
+  <artifactId>spring-boot-circuit-breaker-greeting</artifactId>
 
-  <name>Spring Boot - C/B Booster - Greeting Service</name>
+  <name>Spring Boot - Circuit Breaker Booster - Greeting Service</name>
 
   <dependencies>
     <dependency>

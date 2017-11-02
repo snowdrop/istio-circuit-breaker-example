@@ -5,13 +5,13 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>io.openshift.booster</groupId>
-        <artifactId>springboot-circuit-breaker-parent</artifactId>
+        <artifactId>spring-boot-circuit-breaker-parent</artifactId>
         <version>9-SNAPSHOT</version>
     </parent>
 
-    <artifactId>springboot-circuit-breaker-tests</artifactId>
+    <artifactId>spring-boot-circuit-breaker-tests</artifactId>
 
-    <name>Spring Boot - C/B Booster - Tests</name>
+    <name>Spring Boot - Circuit Breaker Booster - Tests</name>
 
     <dependencies>
         <dependency>

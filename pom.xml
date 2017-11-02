@@ -24,12 +24,12 @@
     </parent>
 
     <groupId>io.openshift.booster</groupId>
-    <artifactId>springboot-circuit-breaker-parent</artifactId>
+    <artifactId>spring-boot-circuit-breaker-parent</artifactId>
     <version>9-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <name>parent</name>
-    <description>Spring Boot - Circuit Breaker</description>
+    <name>Spring Boot - Circuit Breaker Booster</name>
+    <description>Spring Boot - Circuit Breaker Booster</description>
 
     <properties>
         <springboot.version>1.5.8.RELEASE</springboot.version>
