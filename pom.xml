@@ -91,6 +91,11 @@
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>license-maven-plugin</artifactId>
                         <inherited>false</inherited>
+                        <configuration>
+                            <excludedArtifacts>
+                                spring-boot-circuit-breaker
+                            </excludedArtifacts>
+                        </configuration>
                     </plugin>
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>

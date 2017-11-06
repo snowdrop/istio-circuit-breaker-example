@@ -439,28 +439,6 @@
       </licenses>
     </dependency>
     <dependency>
-      <groupId>io.openshift.booster</groupId>
-      <artifactId>spring-boot-circuit-breaker-greeting</artifactId>
-      <version>5-SNAPSHOT</version>
-      <licenses>
-        <license>
-          <name>Apache Software License, Version 2.0</name>
-          <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-        </license>
-      </licenses>
-    </dependency>
-    <dependency>
-      <groupId>io.openshift.booster</groupId>
-      <artifactId>spring-boot-circuit-breaker-name</artifactId>
-      <version>5-SNAPSHOT</version>
-      <licenses>
-        <license>
-          <name>Apache Software License, Version 2.0</name>
-          <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-        </license>
-      </licenses>
-    </dependency>
-    <dependency>
       <groupId>io.reactivex</groupId>
       <artifactId>rxjava</artifactId>
       <version>1.2.0</version>
