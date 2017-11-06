@@ -85,7 +85,7 @@
 
     <script>
         var currentLocation = window.location.origin;
-        var nameServiceUrlBase = currentLocation.indexOf("localhost") !== -1 ? "http://localhost:8081" : currentLocation.replace("springboot-cb-greeting", "springboot-cb-name");
+        var nameServiceUrlBase = currentLocation.indexOf("localhost") !== -1 ? "http://localhost:8081" : currentLocation.replace("greeting", "name");
 
         function initCircuitState() {
             $.getJSON("/api/cb-state", function(res) {
