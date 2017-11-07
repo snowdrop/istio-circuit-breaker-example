@@ -507,7 +507,7 @@
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
-      <version>3.1</version>
+      <version>3.3.2</version>
       <licenses>
         <license>
           <name>Apache Software License, Version 2.0</name>
@@ -793,7 +793,7 @@
     <dependency>
       <groupId>org.ow2.asm</groupId>
       <artifactId>asm</artifactId>
-      <version>5.0.3</version>
+      <version>5.0.4</version>
       <licenses>
         <license>
           <name>BSD 3-clause "New" or "Revised" License</name>
