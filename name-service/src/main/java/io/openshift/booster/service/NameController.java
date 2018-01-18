@@ -56,6 +56,11 @@ public class NameController {
     private final AtomicBoolean doFail = new AtomicBoolean();
     private final NameServiceWebSockerHandler handler = new NameServiceWebSockerHandler();
 
+    @RequestMapping("/api/ping")
+    public StateInfo getPing() throws Exception {
+        return StateInfo.OK;
+    }
+
     /**
      * Endpoint to get a name.
      *

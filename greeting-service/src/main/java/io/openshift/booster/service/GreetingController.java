@@ -34,6 +34,11 @@ public class GreetingController {
         this.nameService = nameService;
     }
 
+    @RequestMapping("/api/ping")
+    public Greeting getPing() throws Exception {
+        return new Greeting("OK");
+    }
+
     /**
      * Endpoint to get a greeting. This endpoint uses a name server to get a name for the greeting.
      * <p>

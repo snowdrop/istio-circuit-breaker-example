@@ -45,8 +45,9 @@ public class OpenShiftIT {
     public void setup() {
         await().pollInterval(1, TimeUnit.SECONDS).atMost(5, TimeUnit.MINUTES).until(() -> {
             try {
-                return RestAssured.get(greetingBaseUri).getStatusCode() == 200
-                        && RestAssured.get(nameBaseUri + "api/info").getStatusCode() == 200;
+                Response gr = RestAssured.get(greetingBaseUri + "api/ping");
+                Response nr = RestAssured.get(nameBaseUri + "api/ping");
+                return gr.getStatusCode() == 200 && nr.getStatusCode() == 200;
             } catch (Exception ignored) {
                 return false;
             }
