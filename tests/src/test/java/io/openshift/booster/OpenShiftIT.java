@@ -11,6 +11,7 @@ import javax.json.Json;
 
 import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.response.Response;
+import org.arquillian.cube.openshift.impl.enricher.AwaitRoute;
 import org.arquillian.cube.openshift.impl.enricher.RouteURL;
 import org.jboss.arquillian.junit.Arquillian;
 import org.junit.Before;
@@ -35,9 +36,11 @@ public class OpenShiftIT {
     // See also circuitBreaker.requestVolumeThreshold
     private static final long REQUEST_THRESHOLD = 3;
 
+    @AwaitRoute(path = "/health")
     @RouteURL("spring-boot-circuit-breaker-name")
     private URL nameBaseUri;
 
+    @AwaitRoute(path = "/health")
     @RouteURL("spring-boot-circuit-breaker-greeting")
     private URL greetingBaseUri;
 
