@@ -32,6 +32,7 @@
   <description>Spring Boot - Circuit Breaker Booster</description>
 
   <properties>
+    <fabric8-maven-plugin.version>3.5.30</fabric8-maven-plugin.version>
     <org.glassfish.javax.json>1.0.3</org.glassfish.javax.json>
   </properties>
 
