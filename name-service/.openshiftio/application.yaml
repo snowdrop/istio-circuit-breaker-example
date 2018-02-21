@@ -1,10 +1,16 @@
 apiVersion: v1
 kind: Template
 metadata:
-  name: launchpad-builder-name-service
+  name: spring-boot-circuit-breaker-name
   annotations:
-    description: This template creates a Build Configuration using an S2I builder.
-    tags: instant-app
+    iconClass: icon-spring
+    tags: spring-boot, circuit breaker, java, microservice
+    openshift.io/display-name: Spring Boot - Name Service managed by the Circuit Breaker
+    openshift.io/provider-display-name: "Red Hat, Inc."
+    openshift.io/documentation-url: "https://appdev.prod-preview.openshift.io/docs/spring-boot-runtime.html#mission-circuit-breaker-spring-boot-tomcat"
+    description: >-
+      The Circuit Breaker Mission demonstrates a generic pattern for reporting the failure of a service and then limiting access to the failed service until it becomes available to handle requests.
+      This helps prevent cascading failure in other services that depend on the failed services for functionality.
 parameters:
 - name: SOURCE_REPOSITORY_URL
   description: The source URL for the application
@@ -59,14 +65,13 @@ objects:
     output:
       to:
         kind: ImageStreamTag
-        name: spring-boot-circuit-breaker-name:10
+        name: spring-boot-circuit-breaker-name:BOOSTER_VERSION
     postCommit: {}
     resources: {}
     source:
       git:
         uri: ${SOURCE_REPOSITORY_URL}
         ref: ${SOURCE_REPOSITORY_REF}
-      #contextDir: ${SOURCE_REPOSITORY_DIR}
       type: Git
     strategy:
       sourceStrategy:
@@ -96,20 +101,10 @@ objects:
 - apiVersion: v1
   kind: Service
   metadata:
-    annotations:
-      fabric8.io/scm-con-url: scm:git:https://github.com/openshiftio/booster-parent.git/springboot-circuit-breaker-parent/spring-boot-circuit-breaker-name
-      prometheus.io/port: "9779"
-      fabric8.io/scm-url: https://github.com/openshiftio/springboot-circuit-breaker-parent/spring-boot-circuit-breaker-name
-      fabric8.io/iconUrl: img/icons/spring-boot.svg
-      fabric8.io/git-branch: sb-1.5.x
-      prometheus.io/scrape: "true"
-      fabric8.io/scm-devcon-url: scm:git:git:@github.com:openshiftio/booster-parent.git/springboot-circuit-breaker-parent/spring-boot-circuit-breaker-name
-      fabric8.io/scm-tag: booster-parent-11
     labels:
-      expose: "true"
       app: spring-boot-circuit-breaker-name
-      provider: fabric8
-      version: "10"
+      provider: snowdrop
+      version: BOOSTER_VERSION
       group: io.openshift.booster
     name: spring-boot-circuit-breaker-name
   spec:
@@ -120,23 +115,15 @@ objects:
       targetPort: 8080
     selector:
       app: spring-boot-circuit-breaker-name
-      provider: fabric8
+      provider: snowdrop
       group: io.openshift.booster
 - apiVersion: v1
   kind: DeploymentConfig
   metadata:
-    annotations:
-      fabric8.io/metrics-path: dashboard/file/kubernetes-pods.json/?var-project=spring-boot-circuit-breaker-name&var-version=10
-      fabric8.io/scm-con-url: scm:git:https://github.com/openshiftio/booster-parent.git/springboot-circuit-breaker-parent/spring-boot-circuit-breaker-name
-      fabric8.io/scm-url: https://github.com/openshiftio/springboot-circuit-breaker-parent/spring-boot-circuit-breaker-name
-      fabric8.io/iconUrl: img/icons/spring-boot.svg
-      fabric8.io/git-branch: sb-1.5.x
-      fabric8.io/scm-devcon-url: scm:git:git:@github.com:openshiftio/booster-parent.git/springboot-circuit-breaker-parent/spring-boot-circuit-breaker-name
-      fabric8.io/scm-tag: booster-parent-11
     labels:
       app: spring-boot-circuit-breaker-name
-      provider: fabric8
-      version: "10"
+      provider: snowdrop
+      version: BOOSTER_VERSION
       group: io.openshift.booster
     name: spring-boot-circuit-breaker-name
   spec:
@@ -144,7 +131,7 @@ objects:
     revisionHistoryLimit: 2
     selector:
       app: spring-boot-circuit-breaker-name
-      provider: fabric8
+      provider: snowdrop
       group: io.openshift.booster
     strategy:
       rollingParams:
@@ -152,18 +139,10 @@ objects:
       type: Rolling
     template:
       metadata:
-        annotations:
-          fabric8.io/metrics-path: dashboard/file/kubernetes-pods.json/?var-project=spring-boot-circuit-breaker-name&var-version=10
-          fabric8.io/scm-con-url: scm:git:https://github.com/openshiftio/booster-parent.git/springboot-circuit-breaker-parent/spring-boot-circuit-breaker-name
-          fabric8.io/scm-url: https://github.com/openshiftio/springboot-circuit-breaker-parent/spring-boot-circuit-breaker-name
-          fabric8.io/iconUrl: img/icons/spring-boot.svg
-          fabric8.io/git-branch: sb-1.5.x
-          fabric8.io/scm-devcon-url: scm:git:git:@github.com:openshiftio/booster-parent.git/springboot-circuit-breaker-parent/spring-boot-circuit-breaker-name
-          fabric8.io/scm-tag: booster-parent-11
         labels:
           app: spring-boot-circuit-breaker-name
-          provider: fabric8
-          version: "10"
+          provider: snowdrop
+          version: BOOSTER_VERSION
           group: io.openshift.booster
       spec:
         containers:
@@ -172,7 +151,7 @@ objects:
             valueFrom:
               fieldRef:
                 fieldPath: metadata.namespace
-          image: spring-boot-circuit-breaker-name:10
+          image: spring-boot-circuit-breaker-name:BOOSTER_VERSION
           imagePullPolicy: IfNotPresent
           livenessProbe:
             httpGet:
@@ -207,15 +186,15 @@ objects:
         - spring-boot
         from:
           kind: ImageStreamTag
-          name: spring-boot-circuit-breaker-name:10
+          name: spring-boot-circuit-breaker-name:BOOSTER_VERSION
       type: ImageChange
 - apiVersion: v1
   kind: Route
   metadata:
     labels:
       app: spring-boot-circuit-breaker-name
-      provider: fabric8
-      version: "10"
+      provider: snowdrop
+      version: BOOSTER_VERSION
       group: io.openshift.booster
     name: spring-boot-circuit-breaker-name
   spec:
