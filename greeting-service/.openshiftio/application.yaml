@@ -103,7 +103,7 @@ objects:
   metadata:
     labels:
       app: spring-boot-circuit-breaker-greeting
-      provider: fabric8
+      provider: snowdrop
       version: "BOOSTER_VERSION"
       group: io.openshift.booster
     name: spring-boot-circuit-breaker-greeting
@@ -115,7 +115,7 @@ objects:
       targetPort: 8080
     selector:
       app: spring-boot-circuit-breaker-greeting
-      provider: fabric8
+      provider: snowdrop
       group: io.openshift.booster
 - apiVersion: v1
   kind: DeploymentConfig
