@@ -53,10 +53,10 @@ objects:
     name: runtime-name
   spec:
     tags:
-    - name: "RUNTIME_VERSION"
+    - name: "1.2-7"
       from:
         kind: DockerImage
-        name: registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift:RUNTIME_VERSION
+        name: registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift:1.2-7
 - apiVersion: v1
   kind: BuildConfig
   metadata:
@@ -65,7 +65,7 @@ objects:
     output:
       to:
         kind: ImageStreamTag
-        name: spring-boot-circuit-breaker-name:BOOSTER_VERSION
+        name: spring-boot-circuit-breaker-name:1.5.10-3
     postCommit: {}
     resources: {}
     source:
@@ -77,7 +77,7 @@ objects:
       sourceStrategy:
         from:
           kind: ImageStreamTag
-          name: runtime-name:RUNTIME_VERSION
+          name: runtime-name:1.2-7
         incremental: true
         env:
         - name: MAVEN_ARGS_APPEND
@@ -104,7 +104,7 @@ objects:
     labels:
       app: spring-boot-circuit-breaker-name
       provider: snowdrop
-      version: "BOOSTER_VERSION"
+      version: "1.5.10-3"
       group: io.openshift.booster
     name: spring-boot-circuit-breaker-name
   spec:
@@ -123,7 +123,7 @@ objects:
     labels:
       app: spring-boot-circuit-breaker-name
       provider: snowdrop
-      version: "BOOSTER_VERSION"
+      version: "1.5.10-3"
       group: io.openshift.booster
     name: spring-boot-circuit-breaker-name
   spec:
@@ -142,7 +142,7 @@ objects:
         labels:
           app: spring-boot-circuit-breaker-name
           provider: snowdrop
-          version: "BOOSTER_VERSION"
+          version: "1.5.10-3"
           group: io.openshift.booster
       spec:
         containers:
@@ -151,7 +151,7 @@ objects:
             valueFrom:
               fieldRef:
                 fieldPath: metadata.namespace
-          image: spring-boot-circuit-breaker-name:BOOSTER_VERSION
+          image: spring-boot-circuit-breaker-name:1.5.10-3
           imagePullPolicy: IfNotPresent
           livenessProbe:
             httpGet:
@@ -186,7 +186,7 @@ objects:
         - spring-boot
         from:
           kind: ImageStreamTag
-          name: spring-boot-circuit-breaker-name:BOOSTER_VERSION
+          name: spring-boot-circuit-breaker-name:1.5.10-3
       type: ImageChange
 - apiVersion: v1
   kind: Route
@@ -194,7 +194,7 @@ objects:
     labels:
       app: spring-boot-circuit-breaker-name
       provider: snowdrop
-      version: "BOOSTER_VERSION"
+      version: "1.5.10-3"
       group: io.openshift.booster
     name: spring-boot-circuit-breaker-name
   spec:
