@@ -16,29 +16,43 @@
 
 package io.openshift.booster.service;
 
-import com.netflix.hystrix.HystrixCircuitBreaker;
-import com.netflix.hystrix.HystrixCommandKey;
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 /**
- * Service invoking name-service via REST and guarded by Hystrix.
+ * Service invoking name-service via REST
  */
 @Service
 public class NameService {
 
-    private static final HystrixCommandKey KEY = HystrixCommandKey.Factory.asKey("NameService");
+    private static final String nameHost = System.getProperty("name.host", "http://spring-boot-circuit-breaker-name:8080");
+    private final RestTemplate restTemplate;
+    private final AtomicBoolean isCBOpen = new AtomicBoolean(false);
 
-    private final String nameHost = System.getProperty("name.host", "http://spring-boot-circuit-breaker-name:8080");
-    private final RestTemplate restTemplate = new RestTemplate();
-
-    @HystrixCommand(commandKey = "NameService", fallbackMethod = "getFallbackName", commandProperties = {
-            @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "1000")
-    })
+    public NameService() {
+        this.restTemplate = new RestTemplate();
+    }
+    
     public String getName() {
-        return restTemplate.getForObject(nameHost + "/api/name", String.class);
+        try {
+            return restTemplate.getForObject(nameHost + "/api/name", String.class);
+        } catch (RestClientException e) {
+            if (e instanceof HttpServerErrorException) {
+                HttpServerErrorException serverError = (HttpServerErrorException) e;
+                // check if we get a 503 error, which is what Istio will send when its CB is open
+                if (HttpStatus.SERVICE_UNAVAILABLE.equals(serverError.getStatusCode())) {
+                    isCBOpen.set(true);
+                    return getFallbackName();
+                }
+            }
+
+            throw e;
+        }
     }
 
     private String getFallbackName() {
@@ -46,7 +60,6 @@ public class NameService {
     }
 
     CircuitBreakerState getState() throws Exception {
-        HystrixCircuitBreaker circuitBreaker = HystrixCircuitBreaker.Factory.getInstance(KEY);
-        return circuitBreaker != null && circuitBreaker.isOpen() ? CircuitBreakerState.OPEN : CircuitBreakerState.CLOSED;
+        return isCBOpen.get() ? CircuitBreakerState.OPEN : CircuitBreakerState.CLOSED;
     }
 }

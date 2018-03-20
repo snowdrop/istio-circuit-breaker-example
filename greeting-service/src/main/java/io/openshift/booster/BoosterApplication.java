@@ -18,13 +18,11 @@ package io.openshift.booster;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 
 /**
  * Entry point to the application.
  */
 @SpringBootApplication
-@EnableCircuitBreaker
 public class BoosterApplication {
 
     public static void main(String[] args) {
