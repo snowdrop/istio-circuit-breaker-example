@@ -136,7 +136,7 @@
               </execution>
             </executions>
             <configuration>
-              <profile>istio-spring-boot-profile</profile>
+              <profile>istio-default</profile>
               <skip>${skip.fmp}</skip>
             </configuration>
           </plugin>
