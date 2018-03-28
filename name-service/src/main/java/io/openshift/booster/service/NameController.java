@@ -18,8 +18,8 @@ package io.openshift.booster.service;
 
 import java.io.IOException;
 import java.time.LocalTime;
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.servlet.Filter;
@@ -28,6 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -37,11 +38,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.filter.CorsFilter;
-import org.springframework.web.socket.CloseStatus;
-import org.springframework.web.socket.TextMessage;
-import org.springframework.web.socket.WebSocketHandler;
-import org.springframework.web.socket.WebSocketMessage;
-import org.springframework.web.socket.WebSocketSession;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 /**
  * Name service controller.
@@ -54,7 +51,7 @@ public class NameController {
     private static final String theName = "World";
 
     private final AtomicBoolean doFail = new AtomicBoolean();
-    private final NameServiceWebSockerHandler handler = new NameServiceWebSockerHandler();
+    private final List<SseEmitter> nameEmitters = new ArrayList<>();
 
     @RequestMapping("/api/ping")
     public StateInfo getPing() throws Exception {
@@ -69,7 +66,7 @@ public class NameController {
     @RequestMapping("/api/name")
     public ResponseEntity<String> getName(@RequestParam(name = "from", required = false) String from) throws IOException {
         final String fromSuffix = from != null ? " from " + from : "";
-        handler.sendMessage("GET /api/name at " + LocalTime.now() + fromSuffix);
+        sendMessage("GET /api/name at " + LocalTime.now() + fromSuffix);
 
         if (doFail.get()) {
             return new ResponseEntity<>("Name service down", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -86,7 +83,7 @@ public class NameController {
     public StateInfo applyState(@RequestParam(name = "state") String state) throws Exception {
         doFail.set("fail".equalsIgnoreCase(state));
         LOG.info("Name service state set to " + state);
-        handler.sendMessage("state:" + !doFail.get());
+        sendMessage("state:" + !doFail.get());
         return getState();
     }
 
@@ -128,9 +125,13 @@ public class NameController {
         }
     }
 
-    @Bean
-    public WebSocketHandler getHandler() {
-        return handler;
+    @RequestMapping("/name-sse")
+    public SseEmitter nameStateEmitter() {
+        SseEmitter emitter = new SseEmitter();
+        nameEmitters.add(emitter);
+        emitter.onCompletion(() -> nameEmitters.remove(emitter));
+
+        return emitter;
     }
 
     @Bean
@@ -142,33 +143,14 @@ public class NameController {
         return new CorsFilter(request -> configuration);
     }
 
-    private class NameServiceWebSockerHandler implements WebSocketHandler {
-        private Queue<WebSocketSession> currentSessions = new ConcurrentLinkedQueue<>();
-
-        void sendMessage(String message) throws IOException {
-            TextMessage textMessage = new TextMessage(message);
-            for (WebSocketSession session : currentSessions) {
-                session.sendMessage(textMessage);
+    private void sendMessage(String message) {
+        nameEmitters.forEach(emitter -> {
+            try {
+                emitter.send(message, MediaType.TEXT_PLAIN);
+            } catch (IOException e) {
+                emitter.complete();
+                nameEmitters.remove(emitter);
             }
-        }
-
-        public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-            currentSessions.add(session);
-        }
-
-        public void handleMessage(WebSocketSession session, WebSocketMessage<?> webSocketMessage) throws Exception {
-        }
-
-        public void handleTransportError(WebSocketSession session, Throwable throwable) throws Exception {
-
-        }
-
-        public void afterConnectionClosed(WebSocketSession session, CloseStatus closeStatus) throws Exception {
-            currentSessions.remove(session);
-        }
-
-        public boolean supportsPartialMessages() {
-            return false;
-        }
+        });
     }
 }

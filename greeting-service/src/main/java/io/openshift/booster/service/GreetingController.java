@@ -16,12 +16,15 @@
 
 package io.openshift.booster.service;
 
-import org.springframework.context.annotation.Bean;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.socket.WebSocketHandler;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 /**
  * Greeting service controller.
@@ -30,7 +33,7 @@ import org.springframework.web.socket.WebSocketHandler;
 public class GreetingController {
 
     private final NameService nameService;
-    private final CircuitBreakerHandler handler = new CircuitBreakerHandler();
+    private final List<SseEmitter> cbEmitters = new ArrayList<>();
 
     public GreetingController(NameService nameService) {
         this.nameService = nameService;
@@ -52,13 +55,26 @@ public class GreetingController {
     @GetMapping("/api/greeting")
     public Greeting getGreeting(@RequestParam(name = "from", required = false) String from) throws Exception {
         String result = String.format("Hello, %s!", nameService.getName(from));
-        handler.sendMessage(nameService.getState());
+
+        cbEmitters.forEach(emitter -> {
+            try {
+                emitter.send(nameService.getState(), MediaType.APPLICATION_JSON);
+            } catch (Exception e) {
+                emitter.complete();
+                cbEmitters.remove(emitter);
+            }
+        });
+
         return new Greeting(result);
     }
 
-    @Bean
-    public WebSocketHandler getHandler() {
-        return handler;
+    @RequestMapping("/cb-sse")
+    public SseEmitter sbStateEmitter() {
+        SseEmitter emitter = new SseEmitter();
+        cbEmitters.add(emitter);
+        emitter.onCompletion(() -> cbEmitters.remove(emitter));
+
+        return emitter;
     }
 
     static class Greeting {

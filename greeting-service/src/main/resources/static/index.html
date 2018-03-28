@@ -192,44 +192,29 @@
             initNameServiceState();
             initCircuitState();
 
-            // WebSocket connections
-            var wsocket;
-
+            // SSE
             function connect() {
-                wsUrlBase = nameServiceUrlBase.replace("http://", "ws://");
-                wsocket = new WebSocket(wsUrlBase + "/name-ws");
-                wsocket.onmessage = onMessage;
-            }
+                var nameStateSource = new EventSource(nameServiceUrlBase + '/name-sse');
+                nameStateSource.addEventListener('message', function (e) {
+                    if (e.data === "state:true") {
+                        updateNameServiceState(true);
+                    } else if (e.data === "state:false") {
+                        updateNameServiceState(false);
+                    } else {
+                        // Request accepted
+                        $("#name-requests").prepend(e.data + "\n");
+                    }
+                }, false);
 
-            function onMessage(evt) {
-                if (evt.data === "state:true") {
-                    updateNameServiceState(true);
-                } else if (evt.data === "state:false") {
-                    updateNameServiceState(false);
-                } else {
-                    // Request accepted
-                    $("#name-requests").prepend(evt.data + "\n");
-                }
+                var cbStateSource = new EventSource('/cb-sse');
+                cbStateSource.addEventListener('message', function (e) {
+                    var isOpen = (e.data === "isOpen:true");
+                    updateCircuitState(isOpen);
+                    console.log("Circuit breaker is open: " + isOpen);
+                }, false);
             }
 
             window.addEventListener("load", connect, false);
-
-            var cbWsocket;
-
-            function cbConnect() {
-                cbWsUrlBase = window.location.origin.replace("http://", "ws://");
-                cbWsocket = new WebSocket(cbWsUrlBase + "/cb-ws");
-                cbWsocket.onmessage = cbOnMessage;
-            }
-
-            function cbOnMessage(evt) {
-                var isOpen = (evt.data === "isOpen:true");
-                updateCircuitState(isOpen);
-                console.log("Circuit breaker is open: " + isOpen);
-            }
-
-            window.addEventListener("load", cbConnect, false);
-
         });
     </script>
 </div>
