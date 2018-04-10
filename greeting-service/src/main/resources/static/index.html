@@ -51,7 +51,11 @@
             <div class="col-md-6">
                 <h2>Greeting service</h2>
                 <div id="circuit-state"></div>
-                <button id="invoke" type="submit" class="btn btn-primary">Invoke</button>
+                <button id="invoke" type="submit" class="btn btn-primary">Start</button><button id="stop" type="submit" class="btn btn-danger">Stop</button>
+                <div class="input-group">
+					<span class="input-group-addon" id="basic-addon1">#</span>
+	                <input type="number" class="form-control" id="max-concurrent" value="10" min="1" max="20" placeholder="Max concurrent requests" aria-describedby="basic-addon1"/>
+				</div>
                 <h3>Results:</h3>
                 <form class="form-inline">
                     <button id="clear" type="submit" class="btn btn-success">Clear</button>
@@ -76,6 +80,7 @@
 
     </div>
 
+	<script src="//cdn.jsdelivr.net/bluebird/3.5.0/bluebird.min.js"></script>
     <script
             src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script
@@ -87,6 +92,11 @@
         var currentLocation = window.location.origin;
         var nameServiceUrlBase = currentLocation.indexOf("localhost") !== -1 ? "http://localhost:8081" : currentLocation.replace("greeting", "name");
 
+		var requestState = {
+			active: 0,
+			completed: 0
+		};
+        
         function initCircuitState() {
             $.getJSON("/api/cb-state", function(res) {
                 updateCircuitState(res.state === "open");
@@ -116,12 +126,47 @@
         }
 
         $(document).ready(function() {
+            var max = Number.parseInt($('#max-concurrent').val());
+            if(max === 0) {
+            	$('#max-concurrent').val(1);
+            }
 
             $("#invoke").click(function(e) {
-                $.getJSON("/api/greeting", function(res) {
-                    $("#greeting-result").prepend(JSON.stringify(res) + "\n");
-                });
+                var makeRequest = function(){
+                    var max = Number.parseInt($('#max-concurrent').val());
+                    if(max === 0) {
+                    	$('#max-concurrent').val(1);
+                    }
+                    if(requestState.active < max) {
+    					requestState.active ++;
+                        if(requestState.active < max) {
+                            makeRequest();
+                        }
+                        $.getJSON("/api/greeting").done(function(res) {
+                            requestState.active--;
+                            $("#greeting-result").prepend(requestState.completed + " " + JSON.stringify(res) + "\n");
+                        }).fail(function(err) {
+                            $("#greeting-result").prepend(requestState.completed + " " + JSON.stringify(err) + "\n");
+                        }).always(function(){
+                            requestState.completed++;
+                            var max = Number.parseInt($('#max-concurrent').val());
+                            if(max > 0) {
+                                console.log("done continuing")
+                                requestState.active--;
+                                makeRequest();
+                            } else {
+                                requestState.active--;
+                                console.log("done", requestState.active)
+                            }
+                        });
+                    }
+                };
+                makeRequest();
                 e.preventDefault();
+            });
+
+            $("#stop").click(function(e) {
+                $('#max-concurrent').val(0);
             });
 
             $("#toggle").click(function(e) {
@@ -137,6 +182,7 @@
 
             $("#clear").click(function(e) {
                 $("#greeting-result").html("");
+                requestState.completed = 0;
                 e.preventDefault();
             });
 
