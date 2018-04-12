@@ -49,18 +49,30 @@
         <div class="row">
 
             <div class="col-md-6">
-                <h2>Greeting service</h2>
-                <div id="circuit-state"></div>
-                <button id="invoke" type="submit" class="btn btn-primary">Start</button><button id="stop" type="submit" class="btn btn-danger">Stop</button>
-                <div class="input-group">
-					<span class="input-group-addon" id="basic-addon1">#</span>
-	                <input type="number" class="form-control" id="max-concurrent" value="10" min="1" max="20" placeholder="Max concurrent requests" aria-describedby="basic-addon1"/>
-				</div>
-                <h3>Results:</h3>
-                <form class="form-inline">
-                    <button id="clear" type="submit" class="btn btn-success">Clear</button>
-                </form>
-                <pre style="min-height:20em;"><code id="greeting-result"></code></pre>
+                <div class="row">
+                    <h2>Greeting service</h2>
+                    <div id="circuit-state"></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="input-group">
+                            <span class="input-group-addon" id="basic-addon1">#</span>
+                            <input type="number" class="form-control" id="max-concurrent" value="10" min="1" max="20"
+                                   placeholder="Max concurrent requests" aria-describedby="basic-addon1"/>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <button id="invoke" type="submit" class="btn btn-primary">Start</button>
+                        <button id="stop" type="submit" class="btn btn-danger">Stop</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <h3>Results:</h3>
+                    <form class="form-inline">
+                        <button id="clear" type="submit" class="btn btn-success">Clear</button>
+                    </form>
+                    <pre style="min-height:20em;"><code id="greeting-result"></code></pre>
+                </div>
             </div>
 
             <div class="col-md-6">
@@ -92,13 +104,13 @@
         var nameServiceUrlBase = currentLocation.indexOf("localhost") !== -1 ? "http://localhost:8081" : currentLocation.replace("greeting", "name");
 
         function initCircuitState() {
-            $.getJSON("/api/cb-state", function(res) {
+            $.getJSON("/api/cb-state", function (res) {
                 updateCircuitState(res.state === "open");
             });
         }
 
         function initNameServiceState() {
-            $.getJSON(nameServiceUrlBase + "/api/info", function(res) {
+            $.getJSON(nameServiceUrlBase + "/api/info", function (res) {
                 updateNameServiceState(res.state === "ok");
             });
         }
@@ -156,24 +168,23 @@
                 e.preventDefault();
             });
 
-            $("#toggle").click(function(e) {
+            $("#toggle").click(function (e) {
                 var newState = $("#name-state").html().indexOf("FAIL") != -1 ? "ok" : "fail";
                 $.ajax({
                     url: nameServiceUrlBase + "/api/state",
                     type: 'PUT',
-                    headers: {"Content-Type" : "application/json"},
-                    data: JSON.stringify({state:newState}),
+                    headers: {"Content-Type": "application/json"},
+                    data: JSON.stringify({state: newState})
                 });
                 e.preventDefault();
             });
 
-            $("#clear").click(function(e) {
+            $("#clear").click(function (e) {
                 $("#greeting-result").html("");
-                requestState.completed = 0;
                 e.preventDefault();
             });
 
-            $("#clear-requests").click(function(e) {
+            $("#clear-requests").click(function (e) {
                 $("#name-requests").html("");
                 e.preventDefault();
             });
@@ -183,11 +194,13 @@
 
             // WebSocket connections
             var wsocket;
+
             function connect() {
                 wsUrlBase = nameServiceUrlBase.replace("http://", "ws://");
                 wsocket = new WebSocket(wsUrlBase + "/name-ws");
                 wsocket.onmessage = onMessage;
             }
+
             function onMessage(evt) {
                 if (evt.data === "state:true") {
                     updateNameServiceState(true);
@@ -198,19 +211,23 @@
                     $("#name-requests").prepend(evt.data + "\n");
                 }
             }
+
             window.addEventListener("load", connect, false);
 
             var cbWsocket;
+
             function cbConnect() {
                 cbWsUrlBase = window.location.origin.replace("http://", "ws://");
                 cbWsocket = new WebSocket(cbWsUrlBase + "/cb-ws");
                 cbWsocket.onmessage = cbOnMessage;
             }
+
             function cbOnMessage(evt) {
                 var isOpen = (evt.data === "isOpen:true");
                 updateCircuitState(isOpen);
                 console.log("Circuit breaker is open: " + isOpen);
             }
+
             window.addEventListener("load", cbConnect, false);
 
         });
