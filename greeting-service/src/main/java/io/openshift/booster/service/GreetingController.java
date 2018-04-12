@@ -17,7 +17,9 @@
 package io.openshift.booster.service;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.socket.WebSocketHandler;
 
@@ -47,9 +49,9 @@ public class GreetingController {
      *
      * @return Greeting string.
      */
-    @RequestMapping("/api/greeting")
-    public Greeting getGreeting() throws Exception {
-        String result = String.format("Hello, %s!", nameService.getName());
+    @GetMapping("/api/greeting")
+    public Greeting getGreeting(@RequestParam(name = "from", required = false) String from) throws Exception {
+        String result = String.format("Hello, %s!", nameService.getName(from));
         handler.sendMessage(nameService.getState());
         return new Greeting(result);
     }

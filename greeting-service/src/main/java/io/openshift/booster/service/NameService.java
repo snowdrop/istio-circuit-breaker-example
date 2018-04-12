@@ -37,10 +37,10 @@ public class NameService {
     public NameService() {
         this.restTemplate = new RestTemplate();
     }
-    
-    public String getName() {
+
+    public String getName(String from) {
         try {
-            return restTemplate.getForObject(nameHost + "/api/name", String.class);
+            return restTemplate.getForObject(nameHost + "/api/name?from={from}", String.class, from);
         } catch (RestClientException e) {
             if (e instanceof HttpServerErrorException) {
                 HttpServerErrorException serverError = (HttpServerErrorException) e;

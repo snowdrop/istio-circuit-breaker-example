@@ -67,14 +67,15 @@ public class NameController {
      * @return Host name.
      */
     @RequestMapping("/api/name")
-    public ResponseEntity<String> getName() throws IOException {
-        handler.sendMessage("GET /api/name at " + LocalTime.now());
+    public ResponseEntity<String> getName(@RequestParam(name = "from", required = false) String from) throws IOException {
+        final String fromSuffix = from != null ? " from " + from : "";
+        handler.sendMessage("GET /api/name at " + LocalTime.now() + fromSuffix);
 
         if (doFail.get()) {
             return new ResponseEntity<>("Name service down", HttpStatus.INTERNAL_SERVER_ERROR);
         } else {
             LOG.info(String.format("Returning a name '%s'", theName));
-            return new ResponseEntity<>(theName, HttpStatus.OK);
+            return new ResponseEntity<>(theName + fromSuffix, HttpStatus.OK);
         }
     }
 
