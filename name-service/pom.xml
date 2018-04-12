@@ -22,10 +22,6 @@
 
   <name>Spring Boot - Circuit Breaker Booster - Name Service</name>
 
-  <properties>
-    <skip.fmp>false</skip.fmp>
-  </properties>
-
   <dependencies>
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -40,6 +36,11 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-actuator</artifactId>
     </dependency>
 
     <dependency>
