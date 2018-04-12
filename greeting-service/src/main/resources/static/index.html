@@ -91,11 +91,6 @@
         var currentLocation = window.location.origin;
         var nameServiceUrlBase = currentLocation.indexOf("localhost") !== -1 ? "http://localhost:8081" : currentLocation.replace("greeting", "name");
 
-		var requestState = {
-			active: 0,
-			completed: 0
-		};
-        
         function initCircuitState() {
             $.getJSON("/api/cb-state", function(res) {
                 updateCircuitState(res.state === "open");
@@ -124,48 +119,41 @@
             }
         }
 
-        $(document).ready(function() {
-            var max = Number.parseInt($('#max-concurrent').val());
-            if(max === 0) {
-            	$('#max-concurrent').val(1);
-            }
+        $(document).ready(function () {
+            var workers;
 
-            $("#invoke").click(function(e) {
-                var makeRequest = function(){
-                    var max = Number.parseInt($('#max-concurrent').val());
-                    if(max === 0) {
-                    	$('#max-concurrent').val(1);
-                    }
-                    if(requestState.active < max) {
-    					requestState.active ++;
-                        if(requestState.active < max) {
-                            makeRequest();
-                        }
-                        $.getJSON("/api/greeting").done(function(res) {
-                            requestState.active--;
-                            $("#greeting-result").prepend(requestState.completed + " " + JSON.stringify(res) + "\n");
-                        }).fail(function(err) {
-                            $("#greeting-result").prepend(requestState.completed + " " + JSON.stringify(err) + "\n");
-                        }).always(function(){
-                            requestState.completed++;
-                            var max = Number.parseInt($('#max-concurrent').val());
-                            if(max > 0) {
-                                console.log("done continuing")
-                                requestState.active--;
-                                makeRequest();
-                            } else {
-                                requestState.active--;
-                                console.log("done", requestState.active)
-                            }
-                        });
-                    }
-                };
-                makeRequest();
+            $("#invoke").click(function (e) {
+                var workerNumber = Number.parseInt($('#max-concurrent').val());
+                workers = [];
+
+                for (var i = 0; i < workerNumber; i++) {
+                    var worker = new Worker('worker.js');
+                    worker.onerror = function (e) {
+                        console.log(e)
+                    };
+                    worker.onmessage = function (e) {
+                        $("#greeting-result").prepend(e.data + "\n");
+                    };
+                    setInterval(function (from) {
+                        worker.postMessage({'from': from})
+                    }, ((Math.random() * i * 100) + 200), i);
+
+                    workers[i] = worker;
+                }
+
                 e.preventDefault();
             });
 
-            $("#stop").click(function(e) {
-                $('#max-concurrent').val(0);
+            $("#stop").click(function (e) {
+                if (workers) {
+                    for (var i = 0; i < workers.length; i++) {
+                        workers[i].terminate();
+                    }
+
+                    workers = undefined;
+                }
+
+                e.preventDefault();
             });
 
             $("#toggle").click(function(e) {
