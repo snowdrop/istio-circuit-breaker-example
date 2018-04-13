@@ -25,8 +25,8 @@ istiooc cluster up --istio=true
 ## Environment preparation
 
 ```bash
-    oc new-project demo-istio
-    oc label namespace demo-istio istio-injection=enabled
+    oc new-project <whatever valid project name you want>
+    oc label namespace $(oc project -q) istio-injection=enabled
 ```
 
 ## Deploy the project
@@ -53,12 +53,12 @@ oc get route spring-boot-circuit-breaker-greeting -o jsonpath='http://{.spec.hos
 
 * Apply the `RouteRule`:
 ```bash
-oc create -f istio/route_rule.yml -n demo-istio
+oc create -f istio/route_rule.yml -n $(oc project -q)
 ```
 * At this point, nothing should have changed in the application behavior.
 * Now apply the `DestinationPolicy` that activates Istio's Circuit Breaker on the name service:
 ```bash
-oc create -f istio/destination_policy.yml -n demo-istio
+oc create -f istio/destination_policy.yml -n $(oc project -q)
 ```
 * Since the Circuit Breaker is configured to only allow 1 concurrent connection and by default we are sending 10 to the name 
 service, we should now see the Circuit Breaker tripping open.
