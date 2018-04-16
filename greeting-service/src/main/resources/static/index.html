@@ -42,8 +42,10 @@
         </p>
         <p>
             On this page you can invoke the <code>greeting service</code>. This service uses a <code>name
-            service</code>. The invocations are protected by a circuit breaker. You can configure the state of the
-            <code>name service</code> using the <code>toggle</code> button.
+            service</code>. The invocations are protected by a circuit breaker. You can select the number of concurrent calls to
+            the <code>name service</code> that will be made using the number input field then click the <code>Start</code>
+            button to start
+            calling the <code>name service</code>. Press the <code>Stop</code> button to stop sending requests.
         </p>
 
         <div class="row">
@@ -51,7 +53,6 @@
             <div class="col-md-6">
                 <div class="row">
                     <h2>Greeting service</h2>
-                    <div id="circuit-state"></div>
                 </div>
                 <div class="row">
                     <div class="col-md-3">
@@ -77,10 +78,6 @@
 
             <div class="col-md-6">
                 <h2>Name service</h2>
-                <div id="name-state"></div>
-                <form class="form-inline">
-                    <button id="toggle" type="submit" class="btn btn-primary">Toggle</button>
-                </form>
                 <h3>Requests:</h3>
                 <form class="form-inline">
                     <button id="clear-requests" type="submit" class="btn btn-success">Clear</button>
@@ -102,34 +99,6 @@
     <script>
         var currentLocation = window.location.origin;
         var nameServiceUrlBase = currentLocation.indexOf("localhost") !== -1 ? "http://localhost:8081" : currentLocation.replace("greeting", "name");
-
-        function initCircuitState() {
-            $.getJSON("/api/cb-state", function (res) {
-                updateCircuitState(res.state === "open");
-            });
-        }
-
-        function initNameServiceState() {
-            $.getJSON(nameServiceUrlBase + "/api/info", function (res) {
-                updateNameServiceState(res.state === "ok");
-            });
-        }
-
-        function updateNameServiceState(state) {
-            if (state) {
-                $("#name-state").html("<h3>Operational state: <span class=\"label label-info\">OK</span></h3>");
-            } else {
-                $("#name-state").html("<h3>Operational state: <span class=\"label label-warning\">FAIL</span></h3>");
-            }
-        }
-
-        function updateCircuitState(isOpen) {
-            if (isOpen) {
-                $("#circuit-state").html("<h3>Circuit breaker state: <span class=\"label label-warning\">OPEN</span></h3>");
-            } else {
-                $("#circuit-state").html("<h3>Circuit breaker state: <span class=\"label label-info\">CLOSED</span></h3>");
-            }
-        }
 
         $(document).ready(function () {
             var workers;
@@ -168,17 +137,6 @@
                 e.preventDefault();
             });
 
-            $("#toggle").click(function (e) {
-                var newState = $("#name-state").html().indexOf("FAIL") != -1 ? "ok" : "fail";
-                $.ajax({
-                    url: nameServiceUrlBase + "/api/state",
-                    type: 'PUT',
-                    headers: {"Content-Type": "application/json"},
-                    data: JSON.stringify({state: newState})
-                });
-                e.preventDefault();
-            });
-
             $("#clear").click(function (e) {
                 $("#greeting-result").html("");
                 e.preventDefault();
@@ -189,28 +147,13 @@
                 e.preventDefault();
             });
 
-            initNameServiceState();
-            initCircuitState();
 
             // SSE
             function connect() {
                 var nameStateSource = new EventSource(nameServiceUrlBase + '/name-sse');
                 nameStateSource.addEventListener('message', function (e) {
-                    if (e.data === "state:true") {
-                        updateNameServiceState(true);
-                    } else if (e.data === "state:false") {
-                        updateNameServiceState(false);
-                    } else {
-                        // Request accepted
-                        $("#name-requests").prepend(e.data + "\n");
-                    }
-                }, false);
-
-                var cbStateSource = new EventSource('/cb-sse');
-                cbStateSource.addEventListener('message', function (e) {
-                    var isOpen = (e.data === "isOpen:true");
-                    updateCircuitState(isOpen);
-                    console.log("Circuit breaker is open: " + isOpen);
+                    // Request accepted
+                    $("#name-requests").prepend(e.data + "\n");
                 }, false);
             }
 
