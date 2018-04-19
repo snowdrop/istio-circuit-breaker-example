@@ -29,66 +29,87 @@
         ul {
             list-style-type: none;
         }
+
         li {
             display: block;
         }
+
         .from0 {
             background-color: maroon;
         }
+
         .from1 {
             background-color: aquamarine;
         }
+
         .from2 {
             background-color: aqua;
         }
+
         .from3 {
             background-color: bisque;
         }
+
         .from4 {
             background-color: green;
         }
+
         .from5 {
             background-color: blue;
         }
+
         .from6 {
             background-color: blueviolet;
         }
+
         .from7 {
             background-color: cyan;
         }
+
         .from8 {
             background-color: darkcyan;
         }
+
         .from9 {
             background-color: brown;
         }
+
         .from10 {
             background-color: chocolate;
         }
+
         .from11 {
             background-color: fuchsia;
         }
+
         .from12 {
             background-color: crimson;
         }
+
         .from13 {
             background-color: darkorange;
         }
+
         .from14 {
             background-color: red;
         }
+
         .from15 {
             background-color: grey;
         }
+
         .from16 {
             background-color: yellow;
         }
+
         .from17 {
             background-color: orange;
         }
+
         .from18 {
             background-color: white;
         }
+
         .from19 {
             background-color: pink;
         }
@@ -146,12 +167,20 @@
             </div>
 
             <div class="col-md-6">
-                <h2>Name service</h2>
-                <h3>Requests:</h3>
-                <form class="form-inline">
-                    <button id="clear-requests" type="submit" class="btn btn-success">Clear</button>
-                </form>
-                <ul id="name-requests"></ul>
+                <div class="row">
+                    <h2>Name service</h2>
+                </div>
+                <div class="row">
+                    <!-- todo: do something to align greeting to name output -->
+                    <br/>
+                </div>
+                <div class="row">
+                    <h3>Requests:</h3>
+                    <form class="form-inline">
+                        <button id="clear-requests" type="submit" class="btn btn-success">Clear</button>
+                    </form>
+                    <ul id="name-requests"></ul>
+                </div>
             </div>
 
         </div>
@@ -173,11 +202,11 @@
             var workers;
             const FROM_STR = 'from';
             const FROM_LEN = FROM_STR.length;
-            
+
 
             function extractFrom(msg) {
                 var index = msg.lastIndexOf(FROM_STR);
-                if(index !== -1) {
+                if (index !== -1) {
                     return msg.substring(index + FROM_LEN + 1);
                 }
                 return "";
