@@ -41,7 +41,7 @@ public class GreetingController {
 
     @RequestMapping("/api/ping")
     public Greeting getPing() throws Exception {
-        return new Greeting("OK");
+        return new Greeting("OK", null);
     }
 
     /**
@@ -65,7 +65,7 @@ public class GreetingController {
             }
         });
 
-        return new Greeting(result);
+        return new Greeting(result, from);
     }
 
     @RequestMapping("/cb-sse")
@@ -79,13 +79,19 @@ public class GreetingController {
 
     static class Greeting {
         private final String content;
+        private final String from;
 
-        public Greeting(String content) {
+        public Greeting(String content, String from) {
             this.content = content;
+            this.from = from;
         }
 
         public String getContent() {
             return content;
+        }
+
+        public String getFrom() {
+            return from;
         }
     }
 }
