@@ -59,8 +59,9 @@ public class NameController {
         final String fromSuffix = from != null ? " from " + from : "";
         sendMessage("GET /api/name at " + LocalTime.now() + fromSuffix);
 
-        LOG.info(String.format("Returning a name '%s'", DEFAULT_NAME));
-        return new ResponseEntity<>(DEFAULT_NAME + fromSuffix, HttpStatus.OK);
+        final String name = DEFAULT_NAME + fromSuffix;
+        LOG.info(String.format("Returning a name '%s'", name));
+        return new ResponseEntity<>(name, HttpStatus.OK);
     }
     
     @RequestMapping("/name-sse")
