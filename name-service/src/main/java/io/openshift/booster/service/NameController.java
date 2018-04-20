@@ -50,13 +50,8 @@ public class NameController {
 
     private static final String theName = "World";
 
-    private final AtomicBoolean doFail = new AtomicBoolean();
     private final List<SseEmitter> nameEmitters = new ArrayList<>();
 
-    @RequestMapping("/api/ping")
-    public StateInfo getPing() throws Exception {
-        return StateInfo.OK;
-    }
 
     /**
      * Endpoint to get a name.
@@ -68,63 +63,10 @@ public class NameController {
         final String fromSuffix = from != null ? " from " + from : "";
         sendMessage("GET /api/name at " + LocalTime.now() + fromSuffix);
 
-        if (doFail.get()) {
-            return new ResponseEntity<>("Name service down", HttpStatus.INTERNAL_SERVER_ERROR);
-        } else {
-            LOG.info(String.format("Returning a name '%s'", theName));
-            return new ResponseEntity<>(theName + fromSuffix, HttpStatus.OK);
-        }
+        LOG.info(String.format("Returning a name '%s'", theName));
+        return new ResponseEntity<>(theName + fromSuffix, HttpStatus.OK);
     }
-
-    /**
-     * Set name service state - via GET.
-     */
-    @GetMapping("/api/state")
-    public StateInfo applyState(@RequestParam(name = "state") String state) throws Exception {
-        doFail.set("fail".equalsIgnoreCase(state));
-        LOG.info("Name service state set to " + state);
-        sendMessage("state:" + !doFail.get());
-        return getState();
-    }
-
-    /**
-     * Set name service state - via PUT.
-     */
-    @PutMapping("/api/state")
-    public StateInfo applyState(@RequestBody StateInfo info) throws Exception {
-        return applyState(info.getState());
-    }
-
-    /**
-     * Set name service state.
-     */
-    @RequestMapping("/api/info")
-    public StateInfo getState() throws Exception {
-        return doFail.get() ? StateInfo.FAIL : StateInfo.OK;
-    }
-
-    static class StateInfo {
-        private String state;
-
-        static final StateInfo OK = new StateInfo("ok");
-        static final StateInfo FAIL = new StateInfo("fail");
-
-        public StateInfo() {
-        }
-
-        public StateInfo(String state) {
-            this.state = state;
-        }
-
-        public String getState() {
-            return state;
-        }
-
-        public void setState(String state) {
-            this.state = state;
-        }
-    }
-
+    
     @RequestMapping("/name-sse")
     public SseEmitter nameStateEmitter() {
         SseEmitter emitter = new SseEmitter();
@@ -149,7 +91,6 @@ public class NameController {
                 emitter.send(message, MediaType.TEXT_PLAIN);
             } catch (IOException e) {
                 emitter.complete();
-                nameEmitters.remove(emitter);
             }
         });
     }
