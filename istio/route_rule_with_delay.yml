@@ -1,0 +1,15 @@
+apiVersion: config.istio.io/v1alpha2
+kind: RouteRule
+metadata:
+  name: spring-boot-circuit-breaker-name-delayed
+spec:
+  destination:
+    name: spring-boot-circuit-breaker-name
+  precedence: 1
+  route:
+  - labels:
+      app: spring-boot-circuit-breaker-name
+  httpFault:
+    delay:
+      percent: 50
+      fixedDelay: 1s
