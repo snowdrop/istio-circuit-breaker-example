@@ -266,6 +266,13 @@
                     workers = undefined;
                 }
 
+                // reset stats
+                callsOK = 0;
+                callsFailed = 0;
+                $("#callsOK").text(callsOK);
+                $("#callsFailed").text(callsFailed);
+                $("#ratio").text(0);
+
                 e.preventDefault();
             });
 
