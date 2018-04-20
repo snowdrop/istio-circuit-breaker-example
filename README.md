@@ -7,7 +7,7 @@ Showcase Istio's Circuit Breaker via a (minimally) instrumented Spring Boot appl
 ## Prerequisites
 
 - OpenShift 3.9 cluster
-- Istio 0.7.1 (without auth enabled) installed on the aforementioned cluster.
+- Istio 0.7.1 installed on the aforementioned cluster.
 - Enable automatic sidecar injection for Istio
   * See [this](https://istio.io/docs/setup/kubernetes/sidecar-injection.html) for details
   * Additionally, **if you're not using the `istiooc` command (see below)**, you will need to manually change the `policy` field
