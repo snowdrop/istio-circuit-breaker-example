@@ -60,7 +60,7 @@ public class NameController {
         sendMessage("GET /api/name at " + LocalTime.now() + fromSuffix);
 
         final String name = DEFAULT_NAME + fromSuffix;
-        LOG.info(String.format("Returning a name '%s'", name));
+        LOG.info(String.format("Returning name '%s'", name));
 
         // add random processing time to have a better chance for concurrent calls
         final int processingDelay = delay != null ? Integer.parseInt(delay) : 150;
