@@ -57,19 +57,29 @@ public class NameController {
     @RequestMapping("/api/name")
     public ResponseEntity<String> getName(@RequestParam(name = "from", required = false) String from, @RequestParam(name = "delay", required = false) String delay) throws IOException {
         final String fromSuffix = from != null ? " from " + from : "";
-        sendMessage("GET /api/name at " + LocalTime.now() + fromSuffix);
 
         final String name = DEFAULT_NAME + fromSuffix;
         LOG.info(String.format("Returning name '%s'", name));
 
-        // add random processing time to have a better chance for concurrent calls
-        final int processingDelay = delay != null ? Integer.parseInt(delay) : 150;
-        try {
-            Thread.sleep(Math.round((Math.random() * 200) + processingDelay));
-        } catch (InterruptedException e) {
-            throw new IOException(e);
+        // add random processing time to have a better chance for concurrent calls if we asked for it
+        if (delay != null && !delay.isEmpty()) {
+            int processingDelay;
+            try {
+                processingDelay = Integer.parseInt(delay);
+            } catch (NumberFormatException e) {
+                processingDelay = 150;
+            }
+            
+            try {
+                final long round = Math.round((Math.random() * 200) + processingDelay);
+                Thread.sleep(round);
+                LOG.info(String.format("Delayed call %s ms", round));
+            } catch (InterruptedException e) {
+                throw new IOException(e);
+            }
         }
 
+        sendMessage("GET /api/name at " + LocalTime.now() + fromSuffix);
         return new ResponseEntity<>(name, HttpStatus.OK);
     }
     
