@@ -227,6 +227,13 @@
 
             $("#invoke").click(function (e) {
                 var workerNumber = Number.parseInt($('#max-concurrent').val());
+
+                // limit workers to 20
+                if(workerNumber > 20) {
+                    workerNumber = 20;
+                    $('#max-concurrent').val(20);
+                }
+
                 workers = [];
 
                 for (var i = 0; i < workerNumber; i++) {
