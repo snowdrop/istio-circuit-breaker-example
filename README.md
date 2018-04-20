@@ -65,9 +65,34 @@ oc get route spring-boot-circuit-breaker-greeting -o jsonpath='http://{.spec.hos
 oc create -f istio/route_rule.yml -n $(oc project -q)
 ```
 * At this point, nothing should have changed in the application behavior.
+
 * Now apply the `DestinationPolicy` that activates Istio's Circuit Breaker on the name service:
 ```bash
 oc create -f istio/destination_policy.yml -n $(oc project -q)
 ```
+
 * Since the Circuit Breaker is configured to only allow 1 concurrent connection and by default we are sending 10 to the name
-service, we should now see the Circuit Breaker tripping open.
+service, we should now see the Circuit Breaker tripping open. However, experimentally, we observe that this does not happen in 
+a clear-cut fashion: the circuit is not always open. In fact, depending on how fast the server on which the application is
+running, the circuit might not break open at all. The reason for this is that is the name service doesn't do much and thus 
+responds quite fast. This, in turn, leads to not having much concurrency at all.
+
+* At this point, we would like to check Istio's fault injection behavior. Delete the original `RouteRule` and apply one that
+adds a second delay to 50% of the calls to the name service:
+```bash
+oc delete -f istio/route_rule.yml
+oc create -f istio/route_rule_with_delay.yml -n $(oc project -q)
+```
+
+* Interacting with the application, we note, though, that this doesn't seem to change how often the circuit breaks open. This is
+due to the fact that the injected delay actually occurs between the services. So, in essence, this only time shifts the requests,
+only increasing concurrency marginally (due to the fact that only 50% of the requests are delayed). This still doesn't let us
+observe the circuit breaking open properly. The solution to increase concurrency is to slow down the name service. To do so, 
+we can introduce a random processing delay (between 150 and 350 ms) to the name service by clicking on the `Add random delay` 
+checkbox and start invoking the name service again. For more comfort, re-activate the original `RouteRule` since we don't need
+the artificial 1 second delay:
+```bash
+oc delete -f istio/route_rule_with_delay.yml
+oc create -f istio/route_rule.yml -n $(oc project -q)
+```
+
