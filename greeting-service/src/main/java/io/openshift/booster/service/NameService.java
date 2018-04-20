@@ -38,9 +38,12 @@ public class NameService {
         this.restTemplate = new RestTemplate();
     }
 
-    public String getName(String from) {
+    public String getName(String from, String delay) {
         try {
-            return restTemplate.getForObject(nameHost + "/api/name?from={from}", String.class, from);
+            if(delay == null) {
+                return restTemplate.getForObject(nameHost + "/api/name?from={from}", String.class, from);
+            }
+            return restTemplate.getForObject(nameHost + "/api/name?from={from}&delay={delay}", String.class, from, delay);
         } catch (RestClientException e) {
             if (e instanceof HttpServerErrorException) {
                 HttpServerErrorException serverError = (HttpServerErrorException) e;

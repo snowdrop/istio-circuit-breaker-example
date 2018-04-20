@@ -47,8 +47,8 @@ public class GreetingController {
      * @return Greeting string.
      */
     @GetMapping("/api/greeting")
-    public Greeting getGreeting(@RequestParam(name = "from", required = false) String from) throws Exception {
-        String result = String.format("Hello, %s!", nameService.getName(from));
+    public Greeting getGreeting(@RequestParam(name = "from", required = false) String from, @RequestParam(name = "delay", required = false) String delay) throws Exception {
+        String result = String.format("Hello, %s!", nameService.getName(from, delay));
 
         return new Greeting(result, from);
     }

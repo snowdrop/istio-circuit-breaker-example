@@ -172,6 +172,8 @@
                 </div>
                 <div class="row">
                     OK calls: <span id="callsOK"></span> / Failed calls: <span id="callsFailed"></span> / Ratio: <span id="ratio"></span>
+                    <input type="checkbox" id="addDelay" title="Add random delay">
+                    <label for="addDelay">Add random delay</label>
                 </div>
                 <div class="row">
                     <h3>Requests:</h3>
@@ -236,6 +238,9 @@
 
                 workers = [];
 
+                // check whether we want random processing delay
+                var addDelay = $('#addDelay')[0].checked;
+
                 for (var i = 0; i < workerNumber; i++) {
                     var worker = new Worker('worker.js');
                     worker.onerror = function (e) {
@@ -247,7 +252,7 @@
                         $("#greeting-result").prepend("<li class='from" + e.data.from + "'>" + JSON.stringify(msg) + "</li>");
                     };
                     worker.timer = setInterval(function (from) {
-                        worker.postMessage({'from': from})
+                        worker.postMessage({'from': from, 'delay': addDelay})
                     }, ((Math.random() * i * 100) + 200), i);
 
                     workers[i] = worker;
