@@ -55,12 +55,21 @@ public class NameController {
      * @return Host name.
      */
     @RequestMapping("/api/name")
-    public ResponseEntity<String> getName(@RequestParam(name = "from", required = false) String from) throws IOException {
+    public ResponseEntity<String> getName(@RequestParam(name = "from", required = false) String from, @RequestParam(name = "delay", required = false) String delay) throws IOException {
         final String fromSuffix = from != null ? " from " + from : "";
         sendMessage("GET /api/name at " + LocalTime.now() + fromSuffix);
 
         final String name = DEFAULT_NAME + fromSuffix;
         LOG.info(String.format("Returning a name '%s'", name));
+
+        // add random processing time to have a better chance for concurrent calls
+        final int processingDelay = delay != null ? Integer.parseInt(delay) : 150;
+        try {
+            Thread.sleep(Math.round((Math.random() * 200) + processingDelay));
+        } catch (InterruptedException e) {
+            throw new IOException(e);
+        }
+
         return new ResponseEntity<>(name, HttpStatus.OK);
     }
     
