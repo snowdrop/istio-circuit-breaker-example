@@ -9,10 +9,5 @@ spec:
       app: spring-boot-circuit-breaker-name
   circuitBreaker:
     simpleCb:
-      maxConnections: 1
-      httpMaxPendingRequests: 1
-      sleepWindow: 5s
-      httpDetectionInterval: 1s
-      httpMaxEjectionPercent: 100
-      httpConsecutiveErrors: 1
-      httpMaxRequestsPerConnection: 1
+      maxConnections: 100
+      httpMaxPendingRequests: 10
