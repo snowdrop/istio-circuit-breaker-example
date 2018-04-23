@@ -125,25 +125,29 @@
 <div class="container">
 
     <div>
+      <div class="row">
         <h1>Circuit Breaker Mission - Spring Boot</h1>
         <p class="lead">
-            Cloud applications are often comprised of many services. And between those services there often can be many interactions.
-            But even if some of those services fail or are unavailable, we may want to offer an alternative response to an error condition,
-            that it does not increase load on service in, which is unavailable because of high load. And to achieve this, we need a generic
-            mechanism over the failed or unavailable service to service communication, which can quickly and easily determine that the services
-            are not functioning properly, hence can either return a default result or fail quickly and gracefully with enough information about
-            the current failure. This mechanism is called circuit breaker.
+          This mission showcases the Circuit Breaker functionality of Istio to handle a fallback scenario where too many requests are being made to a service that has failed.
         </p>
         <p>
-            On this page you can invoke the <code>greeting service</code>. This service uses a <code>name
-            service</code>. The invocations are protected by a circuit breaker. You can select the number of concurrent calls to
-            the <code>name service</code> that will be made using the number input field then click the <code>Start</code>
-            button to start
-            calling the <code>name service</code>. Press the <code>Stop</code> button to stop sending requests.
+          Cloud applications are often comprised of many services. And between those services there often can be many interactions.
+          But even if some of those services fail or are unavailable, we may want to offer an alternative response to an error condition,
+          that it does not increase load on service in, which is unavailable because of high load. And to achieve this, we need a generic
+          mechanism over the failed or unavailable service to service communication, which can quickly and easily determine that the services
+          are not functioning properly, hence can either return a default result or fail quickly and gracefully with enough information about
+          the current failure. This mechanism is called circuit breaker.
         </p>
-
+        <p>
+          On this page you can invoke the <code>greeting service</code>. This service uses a <code>name
+          service</code>. The invocations are protected by a circuit breaker. You can select the number of concurrent calls to
+          the <code>name service</code> that will be made using the number input field then click the <code>Start</code>
+          button to start
+          calling the <code>name service</code>. Press the <code>Stop</code> button to stop sending requests.
+        </p>
+        <hr />
+    </div>
         <div class="row">
-
             <div class="col-md-6">
                 <div class="row">
                     <h2>Greeting service</h2>
@@ -189,7 +193,17 @@
                     <ul id="name-requests"></ul>
                 </div>
             </div>
+        </div>
 
+        <div class="row">
+      		<hr />
+      		<div class="row">
+      			<div class="col-sm-12">
+      				<h1>Instructions</h1>
+      		    <p>
+      		        Please reference the mission documentation or <a href="https://github.com/snowdrop/spring-boot-circuit-breaker-booster/blob/with-sse/README.md">README</a> for next steps and instructions.
+      		    </p>
+            </div>
         </div>
 
     </div>
