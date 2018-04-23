@@ -114,6 +114,10 @@
             background-color: #999999;
         }
 
+        .fallback {
+            background-color: coral;
+        }
+
         div.label {
             padding: 0.7em 0.2em;
         }
@@ -236,18 +240,6 @@
                 return "";
             }
 
-            function doStats(msg) {
-                if (msg.indexOf(FALLBACK) !== -1) {
-                    callsFailed++
-                } else {
-                    callsOK++;
-                }
-
-                $("#callsOK").text(callsOK);
-                $("#callsFailed").text(callsFailed);
-                $("#ratio").text(callsFailed/callsOK);
-            }
-
             $("#invoke").click(function (e) {
                 var workerNumber = Number.parseInt($('#max-concurrent').val());
 
@@ -276,8 +268,21 @@
                     };
                     worker.onmessage = function (e) {
                         var msg = e.data.content;
-                        doStats(msg);
-                        $("#greeting-result").prepend("<li class='from" + e.data.from + "'>" + JSON.stringify(msg) + "</li>");
+
+                        var isFallback = msg.indexOf(FALLBACK) !== -1;
+
+                        // do stats
+                        if (isFallback) {
+                            callsFailed++
+                        } else {
+                            callsOK++;
+                        }
+                        $("#callsOK").text(callsOK);
+                        $("#callsFailed").text(callsFailed);
+                        $("#ratio").text(callsFailed / callsOK);
+
+                        var fromClass = isFallback ? "fallback" : "from" + e.data.from;
+                        $("#greeting-result").prepend("<li class='" + fromClass + "'>" + JSON.stringify(msg) + "</li>");
                     };
                     worker.timer = setInterval(function (from) {
                         worker.postMessage({'from': from, 'delay': addDelay})
