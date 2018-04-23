@@ -113,6 +113,10 @@
         .from19 {
             background-color: pink;
         }
+
+        div.label {
+            padding: 0.7em 0.2em;
+        }
     </style>
 </head>
 
@@ -171,9 +175,11 @@
                     <h2>Name service</h2>
                 </div>
                 <div class="row">
-                    OK calls: <span id="callsOK"></span> / Failed calls: <span id="callsFailed"></span> / Ratio: <span id="ratio"></span>
-                    <input type="checkbox" id="addDelay" title="Add random delay">
-                    <label for="addDelay">Add random delay</label>
+                    <div class="label label-success">OK calls: <span id="callsOK" class="badge"></span></div>
+                    <div class="label label-danger">Failed calls: <span id="callsFailed" class="badge"></span></div>
+                    <div class="label label-info">Ratio: <span id="ratio" class="badge"></span></div>
+                    <input type="checkbox" id="addDelay" title="Simulate load">
+                    <label for="addDelay">Simulate load</label>
                 </div>
                 <div class="row">
                     <h3>Requests:</h3>
