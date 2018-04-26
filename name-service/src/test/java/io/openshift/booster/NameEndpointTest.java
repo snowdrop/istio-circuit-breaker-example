@@ -31,11 +31,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class NameEndpointTest {
 
-    private static final String APPLICATION_JSON = "application/json";
-
-    private static final String OK = "{\"state\":\"ok\"}";
-    private static final String FAIL = "{\"state\":\"fail\"}";
-
     @Value("${local.server.port}")
     private int port;
 
@@ -48,18 +43,4 @@ public class NameEndpointTest {
     public void testGetName() {
         RestAssured.when().get("name").then().assertThat().statusCode(200).body(equalTo("World"));
     }
-
-    @Test
-    public void testGetInfo() {
-        RestAssured.when().get("info").then().assertThat().statusCode(200).body(equalTo(OK));
-    }
-
-    @Test
-    public void testToggle() {
-        RestAssured.given().header("Content-type", APPLICATION_JSON).body(FAIL).put("state").then().assertThat().statusCode(200).body(equalTo(FAIL));
-        RestAssured.when().get("info").then().assertThat().statusCode(200).body(equalTo(FAIL));
-        RestAssured.given().header("Content-type", APPLICATION_JSON).body(OK).put("state").then().assertThat().statusCode(200).body(equalTo(OK));
-        RestAssured.when().get("info").then().assertThat().statusCode(200).body(equalTo(OK));
-    }
-
 }
