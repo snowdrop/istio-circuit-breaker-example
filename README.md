@@ -13,6 +13,7 @@ Showcase Istio's Circuit Breaker via a (minimally) instrumented Spring Boot appl
   * Additionally, **if you're not using the `istiooc` command (see below)**, you will need to manually change the `policy` field
   of the `istio-inject` ConfigMap of the `istio-system` namespace from `enabled` to `disabled` and restart the
   `istio-sidecar-injector` pod afterwards.
+  * The `istio-sidecar-injector` `MutatingWebhookConfiguration` should not limit the injection to properly labeled namespaces. 
 - Login to the cluster with the admin user
 
 Note that the recommended way to start an OpenShift cluster properly setup with Istio is to use the `istiooc` command,
@@ -26,7 +27,6 @@ istiooc cluster up --istio=true
 
 ```bash
     oc new-project <whatever valid project name you want>
-    oc label namespace $(oc project -q) istio-injection=enabled
 ```
 
 ## Deploy the project
