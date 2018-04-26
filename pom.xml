@@ -24,12 +24,12 @@
     <version>1.5.12-3</version>
   </parent>
 
-  <artifactId>spring-boot-circuit-breaker-parent</artifactId>
+  <artifactId>spring-boot-istio-circuit-breaker-parent</artifactId>
   <version>1.5.12-1-SNAPSHOT</version>
   <packaging>pom</packaging>
 
-  <name>Spring Boot - Circuit Breaker Booster</name>
-  <description>Spring Boot - Circuit Breaker Booster</description>
+  <name>Spring Boot - Istio - Circuit Breaker Booster</name>
+  <description>Spring Boot - Istio - Circuit Breaker Booster</description>
 
   <properties>
     <org.glassfish.javax.json>1.0.3</org.glassfish.javax.json>

@@ -30,7 +30,7 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class NameService {
 
-    private static final String nameHost = System.getProperty("name.host", "http://spring-boot-circuit-breaker-name:8080");
+    private static final String nameHost = System.getProperty("name.host", "http://spring-boot-istio-circuit-breaker-name:8080");
     private final RestTemplate restTemplate;
     private final AtomicBoolean isCBOpen = new AtomicBoolean(false);
 
