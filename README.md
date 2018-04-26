@@ -40,15 +40,15 @@ istiooc cluster up --istio=true
 ```bash
 find . | grep openshiftio | grep application | xargs -n 1 oc apply -f
 
-oc new-app --template=spring-boot-circuit-breaker-greeting -p SOURCE_REPOSITORY_URL=https://github.com/snowdrop/spring-boot-circuit-breaker-booster  -p SOURCE_REPOSITORY_REF=with-sse -p SOURCE_REPOSITORY_DIR=name-service
-oc new-app --template=spring-boot-circuit-breaker-name -p SOURCE_REPOSITORY_URL=https://github.com/snowdrop/spring-boot-circuit-breaker-booster  -p SOURCE_REPOSITORY_REF=with-sse -p SOURCE_REPOSITORY_DIR=name-service    
+oc new-app --template=spring-boot-istio-circuit-breaker-greeting -p SOURCE_REPOSITORY_URL=https://github.com/snowdrop/spring-boot-istio-circuit-breaker-booster  -p SOURCE_REPOSITORY_REF=master -p SOURCE_REPOSITORY_DIR=name-service
+oc new-app --template=spring-boot-istio-circuit-breaker-name -p SOURCE_REPOSITORY_URL=https://github.com/snowdrop/spring-boot-istio-circuit-breaker-booster  -p SOURCE_REPOSITORY_REF=master -p SOURCE_REPOSITORY_DIR=name-service    
 ```
 
 ## Interact with the application
 
 * Open the following URL in your browser:
 ```bash
-oc get route spring-boot-circuit-breaker-greeting -o jsonpath='http://{.spec.host}{"\n"}'
+oc get route spring-boot-istio-circuit-breaker-greeting -o jsonpath='http://{.spec.host}{"\n"}'
 ```
 
 ### Without Istio

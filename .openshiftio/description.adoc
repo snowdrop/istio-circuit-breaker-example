@@ -1,1 +1,1 @@
-Quickstart to demonstrate Circuit Breaker pattern with Spring Boot.
+Booster to demonstrate Istio's Circuit Breaker with Spring Boot.

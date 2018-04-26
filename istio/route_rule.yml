@@ -1,11 +1,11 @@
 apiVersion: config.istio.io/v1alpha2
 kind: RouteRule
 metadata:
-  name: spring-boot-circuit-breaker-name-default
+  name: spring-boot-istio-circuit-breaker-name-default
 spec:
   destination:
-    name: spring-boot-circuit-breaker-name
+    name: spring-boot-istio-circuit-breaker-name
   precedence: 1
   route:
   - labels:
-      app: spring-boot-circuit-breaker-name
+      app: spring-boot-istio-circuit-breaker-name

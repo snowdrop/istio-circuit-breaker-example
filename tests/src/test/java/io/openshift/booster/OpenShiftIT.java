@@ -1,9 +1,5 @@
 package io.openshift.booster;
 
-import static com.jayway.awaitility.Awaitility.await;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.core.IsEqual.equalTo;
-
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
@@ -17,6 +13,10 @@ import org.jboss.arquillian.junit.Arquillian;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import static com.jayway.awaitility.Awaitility.await;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.core.IsEqual.equalTo;
 
 /**
  * @author Radek Koubsky
@@ -37,11 +37,11 @@ public class OpenShiftIT {
     private static final long REQUEST_THRESHOLD = 3;
 
     @AwaitRoute(path = "/health")
-    @RouteURL("spring-boot-circuit-breaker-name")
+    @RouteURL("spring-boot-istio-circuit-breaker-name")
     private URL nameBaseUri;
 
     @AwaitRoute(path = "/health")
-    @RouteURL("spring-boot-circuit-breaker-greeting")
+    @RouteURL("spring-boot-istio-circuit-breaker-greeting")
     private URL greetingBaseUri;
 
     @Before

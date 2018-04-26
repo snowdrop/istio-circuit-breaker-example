@@ -5,13 +5,13 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>io.openshift.booster</groupId>
-    <artifactId>spring-boot-circuit-breaker-parent</artifactId>
-    <version>1.5.12-3-SNAPSHOT</version>
+    <artifactId>spring-boot-istio-circuit-breaker-parent</artifactId>
+    <version>1.5.12-1-SNAPSHOT</version>
   </parent>
 
-  <artifactId>spring-boot-circuit-breaker-tests</artifactId>
+  <artifactId>spring-boot-istio-circuit-breaker-tests</artifactId>
 
-  <name>Spring Boot - Circuit Breaker Booster - Tests</name>
+  <name>Spring Boot - Istio - Circuit Breaker Booster - Tests</name>
 
   <dependencies>
     <dependency>
@@ -46,13 +46,13 @@
 
     <dependency>
       <groupId>io.openshift.booster</groupId>
-      <artifactId>spring-boot-circuit-breaker-name</artifactId>
+      <artifactId>spring-boot-istio-circuit-breaker-name</artifactId>
       <version>${project.version}</version>
     </dependency>
 
     <dependency>
       <groupId>io.openshift.booster</groupId>
-      <artifactId>spring-boot-circuit-breaker-greeting</artifactId>
+      <artifactId>spring-boot-istio-circuit-breaker-greeting</artifactId>
       <version>${project.version}</version>
     </dependency>
   </dependencies>
