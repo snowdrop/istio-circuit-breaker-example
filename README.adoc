@@ -15,11 +15,6 @@ In order for Istio automatic sidecar injection to work properly, the following I
 .. The `policy` field is set to `disabled` in the `istio-inject` configmap  of the `istio-system` namespace.
 .. The `istio-sidecar-injector` `MutatingWebhookConfiguration` should not limit the injection to properly labeled namespaces
 
-. Expose services and Istio ingress:
-+
-```
-oc expose svc istio-ingress -n istio-system
-```
 . Login to the cluster with the admin user
 
 == Environment preparation
@@ -44,7 +39,7 @@ Run the following commands to apply and execute the OpenShift templates that wil
 ```bash
 find . | grep openshiftio | grep application | xargs -n 1 oc apply -f
 
-oc new-app --template=spring-boot-istio-circuit-breaker-greeting -p SOURCE_REPOSITORY_URL=https://github.com/snowdrop/spring-boot-istio-circuit-breaker-booster  -p SOURCE_REPOSITORY_REF=master -p SOURCE_REPOSITORY_DIR=name-service
+oc new-app --template=spring-boot-istio-circuit-breaker-greeting -p SOURCE_REPOSITORY_URL=https://github.com/snowdrop/spring-boot-istio-circuit-breaker-booster  -p SOURCE_REPOSITORY_REF=master -p SOURCE_REPOSITORY_DIR=greeting-service
 oc new-app --template=spring-boot-istio-circuit-breaker-name -p SOURCE_REPOSITORY_URL=https://github.com/snowdrop/spring-boot-istio-circuit-breaker-booster  -p SOURCE_REPOSITORY_REF=master -p SOURCE_REPOSITORY_DIR=name-service
 ```
 
