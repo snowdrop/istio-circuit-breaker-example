@@ -1,7 +1,7 @@
 apiVersion: config.istio.io/v1alpha2
 kind: DestinationPolicy
 metadata:
-  name: spring-boot-istio-circuit-breaker-name-destination
+  name: spring-boot-istio-circuit-breaker-name-destination-initial
 spec:
   destination:
     name: spring-boot-istio-circuit-breaker-name
