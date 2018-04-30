@@ -84,6 +84,11 @@ Try the application to see the default behavior without an Istio configuration.
 ```bash
 oc create -f istio/route_rule.yml -n $(oc project -q)
 ```
+. You can check that the `RouteRule` is properly applied by executing:
++
+```bash
+oc get routerule
+```
 . Try the application again.
 +
 At this point, nothing should have changed in the application behavior.
@@ -93,6 +98,11 @@ At this point, nothing should have changed in the application behavior.
 +
 ```bash
 oc create -f istio/initial_destination_policy.yml -n $(oc project -q)
+```
+. You can check that the `DestinationPolicy` is properly applied by executing:
++
+```bash
+oc get destinationpolicy
 ```
 . Try the application again.
 +
