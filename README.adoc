@@ -148,7 +148,7 @@ oc create -f istio/route_rule.yml -n $(oc project -q)
 . Checking the "Simulate load" checkbox
 . Start the requests.
 +
-You should now observe the circuit breaking open.
+You should now observe the circuit breaking open by observing lots of `Hello, Fallback!` messages.
 
 == Undeploy the application
 
