@@ -1,0 +1,14 @@
+apiVersion: config.istio.io/v1alpha2
+kind: RouteRule
+metadata:
+  name: spring-boot-istio-circuit-breaker-greeting-redir
+spec:
+  destination:
+    name: spring-boot-istio-circuit-breaker-greeting
+  match:
+    request:
+      headers:
+        uri:
+          prefix: /breaker # prefix
+  rewrite:
+    uri: /  # drop the /breaker pre

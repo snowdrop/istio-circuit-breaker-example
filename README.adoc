@@ -60,38 +60,40 @@ oc new-app --template=spring-boot-istio-circuit-breaker-name -p SOURCE_REPOSITOR
 
 == Access the application
 
-Run the following command to determine the appropriate URL to access our demo. Make sure you access the url with the HTTP scheme. HTTPS is NOT enabled by default:
-
+. Run the following command to determine the appropriate URL to access our demo. Make sure you access the URL with the HTTP scheme. HTTPS is NOT enabled by default:
++
 ```bash
-oc get route spring-boot-istio-circuit-breaker-greeting -o jsonpath='http://{.spec.host}{"\n"}'
+echo http://$(oc get route istio-ingress -o jsonpath='{.spec.host}{"\n"}' -n istio-system)/breaker
 ```
++
+You should see an error page, since the application route is not yet exposed.
++
+. Apply the `RouteRule` to direct traffic to the greeing service:
++
+```bash
+oc create -f istio/route_rule_public.yml -n $(oc project -q)
+```
++
+Refresh the page. You should now see the example application.
 
-Open this URL in a web browser.
+== Verify application behavior
 
-== Without Istio configuration
-Try the application to see the default behavior without an Istio configuration.
-
-. Click on the "Start" button to issue 10 concurrent requests to the name service.
-. Click on the "Stop" button to stop the requests
-. You can change the number of concurrent requests between 1 and 20.
-. All calls go through as expected.
-
-== Circuit Breaker With Istio
-
-=== Initial setup
 . Apply the `RouteRule` which is required for the `DestinationPolicy` to take effect:
 +
 ```bash
 oc create -f istio/route_rule.yml -n $(oc project -q)
 ```
-. You can check that the `RouteRule` is properly applied by executing:
+. Check that the `RouteRule` is properly applied by executing:
 +
 ```bash
 oc get routerule
 ```
-. Try the application again.
 +
-At this point, nothing should have changed in the application behavior.
+. Click on the "Start" button to issue 10 concurrent requests to the name service.
+. Click on the "Stop" button to stop the requests
+. You can change the number of concurrent requests between 1 and 20.
+. All calls go through as expected.
+
 
 === Initial Circuit Breaker configuration
 . Now apply the initial `DestinationPolicy` that activates Istio's Circuit Breaker on the name service, configuring it to allow a maximum of 100 concurrent connections.
