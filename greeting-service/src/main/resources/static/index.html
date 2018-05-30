@@ -243,6 +243,12 @@
                     $('#max-concurrent').val(20);
                 }
 
+                // limit workers to 1
+                if (workerNumber <= 0) {
+                    workerNumber = 1;
+                    $('#max-concurrent').val(1);
+                }
+
                 // reset stats
                 callsOK = 0;
                 callsFailed = 0;
