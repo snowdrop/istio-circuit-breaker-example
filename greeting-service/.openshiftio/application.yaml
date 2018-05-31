@@ -71,10 +71,10 @@ objects:
     name: runtime-greeting
   spec:
     tags:
-    - name: "BOOSTER_VERSION"
+    - name: "RUNTIME_VERSION"
       from:
         kind: DockerImage
-        name: registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift:BOOSTER_VERSION
+        name: registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift:RUNTIME_VERSION
 - apiVersion: v1
   kind: BuildConfig
   metadata:
@@ -83,7 +83,7 @@ objects:
     output:
       to:
         kind: ImageStreamTag
-        name: spring-boot-istio-circuit-breaker-greeting:
+        name: spring-boot-istio-circuit-breaker-greeting:BOOSTER_VERSION
     postCommit: {}
     resources: {}
     source:
@@ -95,7 +95,7 @@ objects:
       sourceStrategy:
         from:
           kind: ImageStreamTag
-          name: runtime-greeting:BOOSTER_VERSION
+          name: runtime-greeting:RUNTIME_VERSION
         incremental: true
         env:
         - name: MAVEN_ARGS_APPEND
@@ -124,7 +124,7 @@ objects:
     labels:
       app: spring-boot-istio-circuit-breaker-greeting
       provider: snowdrop
-      version: ""
+      version: "BOOSTER_VERSION"
       group: io.openshift.booster
     name: spring-boot-istio-circuit-breaker-greeting
   spec:
@@ -143,7 +143,7 @@ objects:
     labels:
       app: spring-boot-istio-circuit-breaker-greeting
       provider: snowdrop
-      version: ""
+      version: "BOOSTER_VERSION"
       group: io.openshift.booster
     name: spring-boot-istio-circuit-breaker-greeting
   spec:
@@ -164,7 +164,7 @@ objects:
         labels:
           app: spring-boot-istio-circuit-breaker-greeting
           provider: snowdrop
-          version: ""
+          version: "BOOSTER_VERSION"
           group: io.openshift.booster
       spec:
         containers:
@@ -173,7 +173,7 @@ objects:
             valueFrom:
               fieldRef:
                 fieldPath: metadata.namespace
-          image: spring-boot-istio-circuit-breaker-greeting:
+          image: spring-boot-istio-circuit-breaker-greeting:BOOSTER_VERSION
           imagePullPolicy: IfNotPresent
           livenessProbe:
             httpGet:
@@ -208,7 +208,7 @@ objects:
         - spring-boot
         from:
           kind: ImageStreamTag
-          name: spring-boot-istio-circuit-breaker-greeting:
+          name: spring-boot-istio-circuit-breaker-greeting:BOOSTER_VERSION
       type: ImageChange
 - apiVersion: v1
   kind: Route
@@ -216,7 +216,7 @@ objects:
     labels:
       app: spring-boot-istio-circuit-breaker-greeting
       provider: snowdrop
-      version: ""
+      version: "BOOSTER_VERSION"
       group: io.openshift.booster
     name: spring-boot-istio-circuit-breaker-greeting
   spec:
