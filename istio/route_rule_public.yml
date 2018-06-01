@@ -9,6 +9,21 @@ spec:
     request:
       headers:
         uri:
-          prefix: /breaker # prefix
+          prefix: /breaker/greeting # prefix
+  rewrite:
+    uri: /  # drop the /breaker pre
+---
+apiVersion: config.istio.io/v1alpha2
+kind: RouteRule
+metadata:
+  name: spring-boot-istio-circuit-breaker-name-redir
+spec:
+  destination:
+    name: spring-boot-istio-circuit-breaker-name
+  match:
+    request:
+      headers:
+        uri:
+          prefix: /breaker/name # prefix
   rewrite:
     uri: /  # drop the /breaker pre

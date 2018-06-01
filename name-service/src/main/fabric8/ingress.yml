@@ -8,11 +8,11 @@ spec:
   rules:
   - http:
       paths:
-      - path: /breaker/greeting
+      - path: /breaker/name
         backend:
           serviceName: ${project.artifactId}
           servicePort: 8080
-      - path: /breaker/greeting/.*
+      - path: /breaker/name/.*
         backend:
           serviceName: ${project.artifactId}
           servicePort: 8080

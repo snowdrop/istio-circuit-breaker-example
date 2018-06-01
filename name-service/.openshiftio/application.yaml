@@ -42,6 +42,24 @@ parameters:
   displayName:
   required: false
 objects:
+- apiVersion: extensions/v1beta1
+  kind: Ingress
+  metadata:
+    name: spring-boot-istio-circuit-breaker-name
+    annotations:
+      kubernetes.io/ingress.class: istio
+  spec:
+    rules:
+    - http:
+        paths:
+        - path: /breaker/name
+          backend:
+            serviceName: spring-boot-istio-circuit-breaker-name
+            servicePort: 8080
+        - path: /breaker/name/.*
+          backend:
+            serviceName: spring-boot-istio-circuit-breaker-name
+            servicePort: 8080
 - apiVersion: v1
   kind: ImageStream
   metadata:

@@ -63,12 +63,12 @@ oc new-app --template=spring-boot-istio-circuit-breaker-name -p SOURCE_REPOSITOR
 . Run the following command to determine the appropriate URL to access our demo. Make sure you access the URL with the HTTP scheme. HTTPS is NOT enabled by default:
 +
 ```bash
-echo http://$(oc get route istio-ingress -o jsonpath='{.spec.host}{"\n"}' -n istio-system)/breaker
+echo http://$(oc get route istio-ingress -o jsonpath='{.spec.host}{"\n"}' -n istio-system)/breaker/greeting
 ```
 +
-You should see an error page, since the application route is not yet exposed.
+You should see an error 404 page, since the application route is not yet exposed.
 +
-. Apply the `RouteRule` to direct traffic to the greeing service:
+. Apply the `RouteRule` to direct traffic to the greeting and name services:
 +
 ```bash
 oc create -f istio/route_rule_public.yml -n $(oc project -q)

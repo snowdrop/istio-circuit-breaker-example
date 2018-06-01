@@ -11,6 +11,6 @@ onmessage = function (e) {
 
     var delay =  e.data.delay ? "&delay=150" : "";
 
-    xhr.open('GET', '/api/greeting?from=' + e.data.from + delay);
+    xhr.open('GET', '/breaker/greeting/api/greeting?from=' + e.data.from + delay);
     xhr.send();
 };
