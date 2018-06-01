@@ -52,11 +52,11 @@ objects:
     rules:
     - http:
         paths:
-        - path: /breaker
+        - path: /breaker/greeting
           backend:
             serviceName: spring-boot-istio-circuit-breaker-greeting
             servicePort: 8080
-        - path: /breaker/.*
+        - path: /breaker/greeting/.*
           backend:
             serviceName: spring-boot-istio-circuit-breaker-greeting
             servicePort: 8080

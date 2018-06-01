@@ -24,7 +24,7 @@
           href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
           crossorigin="anonymous">
-
+    <base href="/breaker/greeting/" />
     <style>
         ul {
             list-style-type: none;
@@ -132,7 +132,7 @@
       <div class="row">
         <h1>Circuit Breaker Mission - Spring Boot</h1>
         <p class="lead">
-          This mission showcases the Circuit Breaker functionality of Istio to handle a fallback scenario where too many requests are being 
+          This mission showcases the Circuit Breaker functionality of Istio to handle a fallback scenario where too many requests are being
           made to a service, which quality of service has started to degrade.
         </p>
         <p>
@@ -216,7 +216,7 @@
 
     <script>
         var currentLocation = window.location.origin;
-        var nameServiceUrlBase = currentLocation.indexOf("localhost") !== -1 ? "http://localhost:8081" : currentLocation.replace("greeting", "name");
+        var nameServiceUrlBase = document.baseURI.replace("greeting", "name");
 
         $(document).ready(function () {
             var workers;
@@ -262,7 +262,7 @@
                 var addDelay = $('#addDelay')[0].checked;
 
                 for (var i = 0; i < workerNumber; i++) {
-                    var worker = new Worker('worker.js');
+                  var worker = new Worker('worker.js');
                     worker.onerror = function (e) {
                         console.log(e)
                     };
