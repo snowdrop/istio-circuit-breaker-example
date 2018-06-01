@@ -19,7 +19,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>io.openshift.booster</groupId>
+    <groupId>io.openshift</groupId>
     <artifactId>booster-parent</artifactId>
     <version>22</version>
   </parent>
@@ -28,6 +28,7 @@
   <version>1.5.13-3-SNAPSHOT</version>
   <packaging>pom</packaging>
 
+  <groupId>io.openshift.booster</groupId>
   <name>Spring Boot - Istio - Circuit Breaker Booster</name>
   <description>Spring Boot - Istio - Circuit Breaker Booster</description>
 
