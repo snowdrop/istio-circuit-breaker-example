@@ -17,7 +17,7 @@ package io.openshift.booster;
 
 import static org.hamcrest.core.IsEqual.equalTo;
 
-import com.jayway.restassured.RestAssured;
+import io.restassured.RestAssured;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
