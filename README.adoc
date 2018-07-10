@@ -5,7 +5,7 @@ Showcase Istio's Circuit Breaker via a (minimally) instrumented Spring Boot appl
 
 == Prerequisites
 . Openshift 3.9 cluster
-. Istio 0.7.1 installed on the aforementioned cluster. To install Istio simply follow one of the following docs:
+. Istio 0.8 installed on the aforementioned cluster. To install Istio simply follow one of the following docs:
 .. https://istio.io/docs/setup/kubernetes/quick-start.html
 .. https://istio.io/docs/setup/kubernetes/ansible-install.html
 . Enable automatic sidecar injection for Istio (See https://istio.io/docs/setup/kubernetes/sidecar-injection.html[this] for details)
@@ -28,7 +28,7 @@ is empty. It is advised however that you inspect the output of
 +
 to make sure that no other "filters" have been applied.
 
-. Login to the cluster with the admin user
+. Login to the cluster with the *admin* user
 
 == Environment preparation
 
@@ -63,88 +63,75 @@ oc new-app --template=spring-boot-istio-circuit-breaker-name -p SOURCE_REPOSITOR
 . Run the following command to determine the appropriate URL to access our demo. Make sure you access the URL with the HTTP scheme. HTTPS is NOT enabled by default:
 +
 ```bash
-echo http://$(oc get route istio-ingress -o jsonpath='{.spec.host}{"\n"}' -n istio-system)/breaker/greeting
+echo "http://$(oc get route istio-ingressgateway -o jsonpath='{.spec.host}{"\n"}' -n istio-system)/breaker/greeting"
 ```
 +
-You should see an error 404 page, since the application route is not yet exposed.
+You should see an error 404 page, since the routing required to expose the application hasn't been performed.
 +
-. Apply the `RouteRule` to direct traffic to the greeting and name services:
+. Create a `Gateway` and associated `VirtualService` to direct traffic to the `greeting` and `name` services:
 +
 ```bash
-oc create -f istio/route_rule_public.yml -n $(oc project -q)
+oc create -f istio/gateway.yml
 ```
 +
 Refresh the page. You should now see the example application.
 
 == Verify application behavior
 
-. Apply the `RouteRule` which is required for the `DestinationPolicy` to take effect:
-+
-```bash
-oc create -f istio/route_rule.yml -n $(oc project -q)
-```
-. Check that the `RouteRule` is properly applied by executing:
-+
-```bash
-oc get routerule
-```
-+
-. Click on the "Start" button to issue 10 concurrent requests to the name service.
+. Click on the "Start" button to issue 10 concurrent requests to the `name` service.
 . Click on the "Stop" button to stop the requests
 . You can change the number of concurrent requests between 1 and 20.
 . All calls go through as expected.
 
 
 === Initial Circuit Breaker configuration
-. Now apply the initial `DestinationPolicy` that activates Istio's Circuit Breaker on the name service, configuring it to allow a maximum of 100 concurrent connections.
+. Now apply the initial `DestinationRule` that activates Istio's Circuit Breaker on the `name` service, configuring it to allow a maximum of 100 concurrent connections.
 +
 ```bash
-oc create -f istio/initial_destination_policy.yml -n $(oc project -q)
+oc create -f istio/initial_destination_rule.yml -n $(oc project -q)
 ```
-. You can check that the `DestinationPolicy` is properly applied by executing:
+. You can check that the `DestinationRule` is properly applied by executing:
 +
 ```bash
-oc get destinationpolicy
+oc get destinationrules.networking.istio.io
 ```
 . Try the application again.
 +
 Since we only make up to 20 concurrent connections, the circuit breaker should not trip.
 
 === Restrictive Circuit Breaker configuration
-. Now apply a more restrictive `DestinationPolicy`, after having remove the initial one:
+. Now apply a more restrictive `DestinationRule`, after having remove the initial one:
 +
 ```bash
-oc delete -f istio/initial_destination_policy.yml
-oc create -f istio/restrictive_destination_policy.yml -n $(oc project -q)
+oc delete -f istio/initial_destination_rule.yml
+oc create -f istio/restrictive_destination_rule.yml
 ```
 . Try the application again
 +
-Since the Circuit Breaker is now configured to only allow one concurrent connection and by default we are sending 10 to the name service, we should now see the Circuit Breaker tripping open. However, experimentally, we observe that this does not happen in a clear-cut fashion: the circuit is not always open. In fact, depending on how fast the server on which the application is running, the circuit might not break open at all. The reason for this is that is the name service doesn't do much and thus responds quite fast. This, in turn, leads to not having much concurrency at all.
+Since the Circuit Breaker is now configured to only allow one concurrent connection and by default we are sending 10 to the `name` service, we should now see the Circuit Breaker tripping open. However, experimentally, we observe that this does not happen in a clear-cut fashion: the circuit is not always open. In fact, depending on how fast the server on which the application is running, the circuit might not break open at all. The reason for this is that is the `name` service doesn't do much and thus responds quite fast. This, in turn, leads to not having much concurrency at all.
 
 === Optional: fault injection
 
-We could try to increase contention on the name service using Istio's fault injection behavior by applying a 1-second delay to 50% of the calls to the name service.
+We could try to increase contention on the name service using Istio's fault injection behavior by applying a 1-second delay to 50% of the calls to the `name` service.
 
-. Delete the original `RouteRule` and apply a new one to do that:
+. Create a new `VirtualService` for the `name` service to inject a processing delay:
 +
 ```bash
-oc delete -f istio/route_rule.yml
-oc create -f istio/route_rule_with_delay.yml -n $(oc project -q)
+oc create -f istio/name_with_delay.yml
 ```
 . Try the application again
 +
 You should observe that this doesn't seem to change how often the circuit breaks open. This is
 due to the fact that the injected delay actually occurs between the services. So, in essence, this only time shifts the requests, only increasing concurrency marginally (due to the fact that only 50% of the requests are delayed). This still doesn't let us observe the circuit breaking open properly.
 
-. For more comfort, re-activate the original `RouteRule` since we don't need the artificial one-second delay:
+. For more comfort, let's return to the original configuration by deleting the `VirtualService` we just introduced:
 ```bash
-oc delete -f istio/route_rule_with_delay.yml
-oc create -f istio/route_rule.yml -n $(oc project -q)
+oc delete -f istio/name_with_delay.yml
 ```
 
 === Simulate load on the name service
 
-* We need to increase contention on the name service in order to have enough concurrent connections to trip open the circuit breaker. We can accomplish this by simulating load on the name service by asking it to introduce a random processing time. To accomplish this:
+* We need to increase contention on the `name` service in order to have enough concurrent connections to trip open the circuit breaker. We can accomplish this by simulating load on the `name` service by asking it to introduce a random processing time. To accomplish this:
 
 . Stop the requests (if that wasn't already the case)
 . Checking the "Simulate load" checkbox

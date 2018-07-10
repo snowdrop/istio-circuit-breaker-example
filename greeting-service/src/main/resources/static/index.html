@@ -215,8 +215,7 @@
             crossorigin="anonymous"></script>
 
     <script>
-        var currentLocation = window.location.origin;
-        var nameServiceUrlBase = document.baseURI.replace("greeting", "name");
+        var nameServiceUrlBase = document.location.href.replace("greeting", "name");
 
         $(document).ready(function () {
             var workers;
