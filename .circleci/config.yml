@@ -1,0 +1,58 @@
+version: 2
+jobs:
+  compile:
+    machine: true
+
+    steps:
+    - checkout
+
+    # based on this: https://discuss.circleci.com/t/circle-2-0-caching-is-too-limited-to-be-very-useful/11694/10
+    - restore_cache:
+        keys:
+        - spring-boot-istio-circuit-breaker-booster-{{ .Branch }}-{{ checksum "pom.xml" }}
+        - spring-boot-istio-circuit-breaker-booster-{{ .Branch }}
+        - spring-boot-istio-circuit-breaker-booster
+
+    - run:
+        name: Install Maven dependencies locally
+        command: |
+          # Need to exclude tests since Maven will fail. See https://stackoverflow.com/q/14694139/2504224
+          if ! ./mvnw -q -s .circleci/settings.xml dependency:go-offline; then
+              bom_version=$(grep -oPm1 "(?<=<spring-boot.bom.version>)[^<]+" pom.xml)
+              echo "Need to checkout the Spring Boot BOM by checking it out from Github using version: ${bom_version}"
+
+              pushd /tmp > /dev/null
+              #Clone the BOM from Github, checkout the tag that matches the BOM version and install it locally
+              git clone https://github.com/snowdrop/spring-boot-bom.git
+              cd spring-boot-bom
+              git fetch --all --tags --prune
+              git checkout tags/${bom_version}
+              mvn install
+
+              echo "Installed BOM from source"
+
+              popd > /dev/null
+              #Re-execute command since the BOM has now been installed to the local .m2 directory
+              ./mvnw -q -s .circleci/settings.xml dependency:go-offline
+          fi
+
+    - save_cache:
+        paths:
+        - ~/.m2
+        key: spring-boot-istio-circuit-breaker-booster-{{ .Branch }}-{{ checksum "pom.xml" }}
+
+    - run:
+        name: Compile project
+        command:  |
+          mvn clean compile -s .circleci/settings.xml
+
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+    - compile:
+        filters:
+          branches:
+            ignore:
+            - /.*redhat.*/
+            - /.*rh.*/
