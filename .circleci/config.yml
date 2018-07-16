@@ -44,7 +44,7 @@ jobs:
     - run:
         name: Compile project
         command:  |
-          mvn clean compile -s .circleci/settings.xml
+          ./mvnw clean compile -s .circleci/settings.xml
 
 workflows:
   version: 2
