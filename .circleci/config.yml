@@ -6,6 +6,53 @@ jobs:
     steps:
     - checkout
 
+    - run:
+        name: Launch Openshift with Istio
+        command: |
+          kube_version=$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)
+          curl -LO https://storage.googleapis.com/kubernetes-release/release/${kube_version}/bin/linux/amd64/kubectl && \
+              chmod +x kubectl && sudo mv kubectl /usr/local/bin/
+          echo "Installed kubectl CLI tool"
+
+          istiooc_version="istio-3.9-1.0.0-alpha1"
+          curl -LO https://github.com/openshift-istio/origin/releases/download/${istiooc_version}/istiooc_linux && \
+              chmod +x $PWD/istiooc_linux && sudo mv $PWD/istiooc_linux /usr/local/bin/oc && \
+          echo "Installed istiooc CLI tool"
+
+          tmp=`mktemp`
+          echo 'DOCKER_OPTS="$DOCKER_OPTS --insecure-registry 172.30.0.0/16  --insecure-registry registry.access.redhat.com"' > ${tmp}
+          sudo mv ${tmp} /etc/default/docker
+          sudo mount --make-shared /
+          sudo service docker restart
+          echo "Configured Docker daemon with insecure-registry"
+
+          oc cluster up --istio
+
+          # wait for the Kubernetes Job that starts the Istio installation to commence
+          sleep 180
+
+          oc login -u system:admin
+
+          # take down components of Istio that we don't need
+          # this is done in order to reduce the keep the resources used as low as possible
+
+          timeout 300s bash -c 'while [[ $(oc get deployment -l app=grafana  -n istio-system -o json | jq ".items[0].metadata.name") == "grafana" ]]; do sleep 10; done; echo ""'
+          oc scale deployment -l app=grafana -n istio-system  --replicas=0
+
+          timeout 300s bash -c 'while [[ $(oc get deployment -l app=prometheus  -n istio-system -o json | jq ".items[0].metadata.name") == "prometheus" ]]; do sleep 10; done; echo ""'
+          oc scale deployment -l app=prometheus -n istio-system  --replicas=0
+
+          timeout 300s bash -c 'while [[ $(oc get deployment -l app=egressgateway  -n istio-system -o json | jq ".items[0].metadata.name") == "istio-egressgateway" ]]; do sleep 10; done; echo ""'
+          oc scale deployment -l app=egressgateway -n istio-system  --replicas=0
+
+          timeout 300s bash -c 'while [[ $(oc get deployment -l app=security  -n istio-system -o json | jq ".items[0].metadata.name") == "istio-citadel" ]]; do sleep 10; done; echo ""'
+          oc scale deployment -l app=security -n istio-system  --replicas=0
+
+          # wait for the istio components to stand up
+          timeout 300s bash -c 'while [[ $(oc get pod -l istio=sidecar-injector  -n istio-system -o json | jq ".items[0].status.phase") == "Running" ]]; do sleep 20; done; echo ""'
+
+          echo "Configured OpenShift cluster with Istio 1.0"
+
     # based on this: https://discuss.circleci.com/t/circle-2-0-caching-is-too-limited-to-be-very-useful/11694/10
     - restore_cache:
         keys:
@@ -42,9 +89,11 @@ jobs:
         key: spring-boot-istio-circuit-breaker-booster-{{ .Branch }}-{{ checksum "pom.xml" }}
 
     - run:
-        name: Compile project
+        name: run tests against fmp build
         command:  |
-          ./mvnw clean compile -s .circleci/settings.xml
+          oc new-project fmp
+          .circleci/run_tests_with_fmp.sh -s .circleci/settings.xml
+        no_output_timeout: 3600
 
 workflows:
   version: 2
