@@ -30,6 +30,7 @@
   <description>Spring Boot - Istio - Circuit Breaker Booster</description>
   <properties>
     <arquillian.version>1.4.0.Final</arquillian.version>
+    <arquillian-cube.version>1.17.1</arquillian-cube.version>
     <awaitility.version>3.1.0</awaitility.version>
     <javax.json.version>1.0.3</javax.json.version>
     <junit.version>4.12</junit.version>
@@ -64,6 +65,11 @@
         <version>${arquillian.version}</version>
         <type>pom</type>
         <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.arquillian.cube</groupId>
+        <artifactId>arquillian-cube-istio-kubernetes</artifactId>
+        <version>${arquillian-cube.version}</version>
       </dependency>
       <dependency>
         <groupId>junit</groupId>
