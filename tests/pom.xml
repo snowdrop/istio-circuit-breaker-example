@@ -41,6 +41,11 @@
       </exclusions>
     </dependency>
     <dependency>
+      <groupId>org.arquillian.cube</groupId>
+      <artifactId>arquillian-cube-istio-kubernetes</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <scope>test</scope>
@@ -58,6 +63,11 @@
     <dependency>
       <groupId>org.awaitility</groupId>
       <artifactId>awaitility</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-core</artifactId>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -127,6 +137,21 @@
                       <includes>
                         <include>*-is.yml</include>
                       </includes>
+                    </resource>
+                  </resources>
+                </configuration>
+              </execution>
+              <execution>
+                <id>copy-istio-resources</id>
+                <phase>process-test-resources</phase>
+                <goals>
+                  <goal>copy-resources</goal>
+                </goals>
+                <configuration>
+                  <outputDirectory>${project.basedir}/target/test-classes</outputDirectory>
+                  <resources>
+                    <resource>
+                      <directory>${project.basedir}/../istio</directory>
                     </resource>
                   </resources>
                 </configuration>
