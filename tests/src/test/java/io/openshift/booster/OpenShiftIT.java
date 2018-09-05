@@ -7,6 +7,7 @@ import org.arquillian.cube.istio.impl.IstioAssistant;
 import org.arquillian.cube.openshift.impl.enricher.RouteURL;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -17,6 +18,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import org.junit.runners.MethodSorters;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
@@ -26,6 +28,9 @@ import static org.awaitility.Awaitility.await;
  */
 @RunWith(Arquillian.class)
 @IstioResource("classpath:gateway.yml")
+// this is a stop gap solution until deletion of the custom resources works correctly
+// see https://github.com/snowdrop/istio-java-api/issues/31
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class OpenShiftIT {
     private static final String ISTIO_NAMESPACE = "istio-system";
     private static final String ISTIO_INGRESS_GATEWAY_NAME = "istio-ingressgateway";
@@ -62,7 +67,8 @@ public class OpenShiftIT {
 
         ResponsesCount responsesCount = measureResponses(0);
 
-        istioAssistant.undeployIstioResources(resource);
+        // TODO bring back when resource removal actually works
+//        istioAssistant.undeployIstioResources(resource);
 
         // Assert that there are fallback responses
         /*
@@ -76,13 +82,16 @@ public class OpenShiftIT {
     @Test
     public void testSimulatedLoad() throws IOException, InterruptedException {
         waitUntilApplicationIsReady();
-        List <me.snowdrop.istio.api.model.IstioResource> resource = deployIstioResource("restrictive_destination_rule.yml");
 
-        Thread.sleep(TimeUnit.SECONDS.toMillis(10)); // wait for rule to take effect
+        // TODO bring back when resource removal actually works
+//        List <me.snowdrop.istio.api.model.IstioResource> resource = deployIstioResource("restrictive_destination_rule.yml");
+//        Thread.sleep(TimeUnit.SECONDS.toMillis(10)); // wait for rule to take effect
 
         ResponsesCount responsesCount = measureResponses(150);
 
-        istioAssistant.undeployIstioResources(resource);
+        // TODO bring back when resource removal actually works
+//        istioAssistant.undeployIstioResources(resource);
+
         // Assert that there are enough fallback responses in the responses
         assertThat(responsesCount.getPassedResponses())
                 .isLessThanOrEqualTo(responsesCount.getFallbackResponses() * FALLBACK_RESPONSE_RATIO);
