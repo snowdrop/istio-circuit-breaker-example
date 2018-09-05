@@ -6,7 +6,6 @@
     <property name="namespace.use.current">true</property>
     <property name="env.init.enabled">true</property>
     <property name="enableImageStreamDetection">false</property>
-    <!-- property name="env.dependencies">file://${basedir}/../name-service/target/classes/META-INF/fabric8/openshift.yml,file://${basedir}/../greeting-service/target/classes/META-INF/fabric8/openshift.yml</property -->
   </extension>
 
 </arquillian>
