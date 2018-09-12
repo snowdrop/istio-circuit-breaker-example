@@ -143,9 +143,6 @@ public class OpenShiftIT {
                                             int workersCount) throws InterruptedException, IOException {
         waitUntilApplicationIsReady();
 
-        // TODO bring back when resource removal actually works
-//        List <me.snowdrop.istio.api.model.IstioResource> resource = deployIstioResource("restrictive_destination_rule.yml");
-//        Thread.sleep(TimeUnit.SECONDS.toMillis(10)); // wait for rule to take effect
         // deploy desired istio rules
         List <me.snowdrop.istio.api.model.IstioResource> resource = new ArrayList<>();
         for (String istioResource: istioResources){
