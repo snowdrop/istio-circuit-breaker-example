@@ -24,7 +24,7 @@
   </parent>
   <groupId>io.openshift.booster</groupId>
   <artifactId>spring-boot-istio-circuit-breaker-parent</artifactId>
-  <version>1.5.15-3-SNAPSHOT</version>
+  <version>1.5.15-4-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>Spring Boot - Istio - Circuit Breaker Booster</name>
   <description>Spring Boot - Istio - Circuit Breaker Booster</description>
@@ -32,6 +32,7 @@
     <arquillian.version>1.4.0.Final</arquillian.version>
     <arquillian-cube.version>1.17.1</arquillian-cube.version>
     <awaitility.version>3.1.0</awaitility.version>
+    <commons-logging.version>1.2</commons-logging.version>
     <javax.json.version>1.0.3</javax.json.version>
     <junit.version>4.12</junit.version>
     <assertj.version>3.11.0</assertj.version>
@@ -98,6 +99,12 @@
         <version>${assertj.version}</version>
         <scope>test</scope>
       </dependency>
+      <dependency>
+        <groupId>commons-logging</groupId>
+        <artifactId>commons-logging</artifactId>
+        <version>${commons-logging.version}</version>
+      </dependency>
+
     </dependencies>
   </dependencyManagement>
   <modules>
