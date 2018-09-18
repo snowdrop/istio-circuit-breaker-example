@@ -24,7 +24,7 @@
   </parent>
   <groupId>io.openshift.booster</groupId>
   <artifactId>spring-boot-istio-circuit-breaker-parent</artifactId>
-  <version>1.5.15-4-SNAPSHOT</version>
+  <version>1.5.15-5-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>Spring Boot - Istio - Circuit Breaker Booster</name>
   <description>Spring Boot - Istio - Circuit Breaker Booster</description>
