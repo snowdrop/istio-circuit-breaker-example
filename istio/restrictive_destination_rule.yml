@@ -1,3 +1,16 @@
+# We add the policy to disable TLS in order to ensure that
+# we can always use the same value of DISABLE in the
+# DestinationRule
+# This is only done to ensure that the booster works flawlessly in
+# an Istio environment whether TLS is globally enabled or not
+apiVersion: authentication.istio.io/v1alpha1
+kind: Policy
+metadata:
+  name: spring-boot-istio-circuit-breaker-name
+spec:
+  targets:
+    - name: spring-boot-istio-circuit-breaker-name
+---
 apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
 metadata:
@@ -5,6 +18,8 @@ metadata:
 spec:
   host: spring-boot-istio-circuit-breaker-name
   trafficPolicy:
+    tls:
+      mode: DISABLE
     connectionPool:
       tcp:
         maxConnections: 1
