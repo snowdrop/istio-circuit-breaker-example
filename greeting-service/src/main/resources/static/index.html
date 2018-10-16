@@ -196,13 +196,6 @@
                     <input type="checkbox" id="addDelay" title="Simulate load">
                     <label for="addDelay">Simulate load</label>
                 </div>
-                <div class="row">
-                    <h3>Requests:</h3>
-                    <form class="form-inline">
-                        <button id="clear-requests" type="submit" class="btn btn-success">Clear</button>
-                    </form>
-                    <ul id="name-requests"></ul>
-                </div>
             </div>
         </div>
     </div>
@@ -215,37 +208,26 @@
             crossorigin="anonymous"></script>
 
     <script>
-        var nameServiceUrlBase = document.location.href.replace("greeting", "name");
-
         $(document).ready(function () {
-            var workers;
-            const FROM_STR = 'from';
-            const FROM_LEN = FROM_STR.length;
+            let workers;
             const FALLBACK = 'Fallback';
-            var callsOK = 0, callsFailed = 0;
+            let callsOK = 0, callsFailed = 0;
 
-
-            function extractFrom(msg) {
-                var index = msg.lastIndexOf(FROM_STR);
-                if (index !== -1) {
-                    return msg.substring(index + FROM_LEN + 1);
-                }
-                return "";
-            }
-
+            
             $("#invoke").click(function (e) {
-                var workerNumber = Number.parseInt($('#max-concurrent').val());
+                let $max = $('#max-concurrent');
+                let workerNumber = Number.parseInt($max.val());
 
                 // limit workers to 20
                 if(workerNumber > 20) {
                     workerNumber = 20;
-                    $('#max-concurrent').val(20);
+                    $max.val(20);
                 }
 
                 // limit workers to 1
                 if (workerNumber <= 0) {
                     workerNumber = 1;
-                    $('#max-concurrent').val(1);
+                    $max.val(1);
                 }
 
                 // reset stats
@@ -260,15 +242,14 @@
                 // check whether we want random processing delay
                 var addDelay = $('#addDelay')[0].checked;
 
-                for (var i = 0; i < workerNumber; i++) {
-                  var worker = new Worker('worker.js');
+                for (let i = 0; i < workerNumber; i++) {
+                    const worker = new Worker('worker.js');
                     worker.onerror = function (e) {
                         console.log(e)
                     };
                     worker.onmessage = function (e) {
-                        var msg = e.data.content;
-
-                        var isFallback = msg.indexOf(FALLBACK) !== -1;
+                        const msg = e.data.content;
+                        const isFallback = msg.indexOf(FALLBACK) !== -1;
 
                         // do stats
                         if (isFallback) {
@@ -280,7 +261,7 @@
                         $("#callsFailed").text(callsFailed);
                         $("#ratio").text(callsFailed / callsOK);
 
-                        var fromClass = isFallback ? "fallback" : "from" + e.data.from;
+                        const fromClass = isFallback ? "fallback" : "from" + e.data.from;
                         $("#greeting-result").prepend("<li class='" + fromClass + "'>" + JSON.stringify(msg) + "</li>");
                     };
                     worker.timer = setInterval(function (from) {
@@ -310,23 +291,6 @@
                 $("#greeting-result").html("");
                 e.preventDefault();
             });
-
-            $("#clear-requests").click(function (e) {
-                $("#name-requests").html("");
-                e.preventDefault();
-            });
-
-
-            // SSE
-            function connect() {
-                var nameStateSource = new EventSource(nameServiceUrlBase + '/name-sse');
-                nameStateSource.addEventListener('message', function (e) {
-                    // Request accepted
-                    $("#name-requests").prepend("<li class='from" + extractFrom(e.data) + "'>" + e.data + "</li>");
-                }, false);
-            }
-
-            window.addEventListener("load", connect, false);
         });
     </script>
 </div>
