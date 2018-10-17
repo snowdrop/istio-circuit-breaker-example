@@ -61,7 +61,7 @@ public class OpenShiftIT {
     @Test
     public void testCircuitBreakerOpen() throws IOException, InterruptedException {
         waitUntilApplicationIsReady();
-        List <me.snowdrop.istio.api.model.IstioResource> resource = deployIstioResource("restrictive_destination_rule.yml");
+        List <me.snowdrop.istio.api.IstioResource> resource = deployIstioResource("restrictive_destination_rule.yml");
 
         Thread.sleep(TimeUnit.SECONDS.toMillis(10)); // wait for rule to take effect
 
@@ -144,7 +144,7 @@ public class OpenShiftIT {
                 );
     }
 
-    private List<me.snowdrop.istio.api.model.IstioResource> deployIstioResource(String istioResource) throws IOException {
+    private List<me.snowdrop.istio.api.IstioResource> deployIstioResource(String istioResource) throws IOException {
         return istioAssistant.deployIstioResources(
                 Files.newInputStream(Paths.get("../istio/" + istioResource)));
     }
