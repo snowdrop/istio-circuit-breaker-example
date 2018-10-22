@@ -30,7 +30,7 @@
   <description>Spring Boot - Istio - Circuit Breaker Booster</description>
   <properties>
     <arquillian.version>1.4.0.Final</arquillian.version>
-    <arquillian-cube.version>1.18.0</arquillian-cube.version>
+    <arquillian-cube.version>1.18.2</arquillian-cube.version>
     <awaitility.version>3.1.0</awaitility.version>
     <commons-logging.version>1.2</commons-logging.version>
     <javax.json.version>1.0.3</javax.json.version>
