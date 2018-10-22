@@ -104,19 +104,19 @@ public class OpenShiftIT {
      */
     private ResponsesCount measureResponses(int delay) throws InterruptedException {
         // create threads that will make the calls in parallel
-        List<GreetingAsker> askerArray = new ArrayList<>();
+        List<GreetingWorker> workerArray = new ArrayList<>();
         for (int i=0 ; i < QUERY_ASKERS_CNT ; i++){
-            GreetingAsker asker = new GreetingAsker(Integer.toString(i),ingressGatewayURL,QUERY_ASKERS_REQUEST_CNT);
-            asker.setRequestDelay(delay);
-            asker.start();
-            askerArray.add(asker);
+            GreetingWorker worker = new GreetingWorker(Integer.toString(i),ingressGatewayURL,QUERY_ASKERS_REQUEST_CNT);
+            worker.setRequestDelay(delay);
+            worker.start();
+            workerArray.add(worker);
         }
 
         ResponsesCount totalResponses = new ResponsesCount();
         // wait for threats to end and take their results
-        for (GreetingAsker greetingAsker : askerArray){
-            greetingAsker.join();
-            totalResponses.addResponses(greetingAsker.getResponsesCount());
+        for (GreetingWorker greetingWorker : workerArray){
+            greetingWorker.join();
+            totalResponses.addResponses(greetingWorker.getResponsesCount());
         }
         return totalResponses;
     }
