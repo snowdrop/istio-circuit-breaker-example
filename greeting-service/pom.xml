@@ -15,7 +15,7 @@
   <parent>
     <groupId>io.openshift.booster</groupId>
     <artifactId>spring-boot-istio-circuit-breaker-parent</artifactId>
-    <version>1.5.17-3-SNAPSHOT</version>
+    <version>1.5.17-4-SNAPSHOT</version>
   </parent>
 
   <artifactId>spring-boot-istio-circuit-breaker-greeting</artifactId>
