@@ -67,30 +67,30 @@ public class OpenShiftIT {
 
         ResponsesCount responsesCount = measureResponses(0);
 
-        // TODO bring back when resource removal actually works
-//        istioAssistant.undeployIstioResources(resource);
+        istioAssistant.undeployIstioResources(resource);
 
         // Assert that there are fallback responses
         /*
          * We cannot presume that there will be any specific number of fallback responses.
          * On high performance clusters the circuit breaker may not trip often and it could cause test to fail
-         *      even if there are no real failure.
+         *      even if there is no real failure.
          */
-        assertThat(responsesCount.getFallbackResponses()).isGreaterThan(0);
+
+        // at least 10% of responses are fallbacks
+        assertThat(((responsesCount.getFallbackResponses() * 100)
+                / responsesCount.getTotalResponses())).isGreaterThan(10);
     }
 
     @Test
     public void testSimulatedLoad() throws IOException, InterruptedException {
         waitUntilApplicationIsReady();
 
-        // TODO bring back when resource removal actually works
-//        List <me.snowdrop.istio.api.model.IstioResource> resource = deployIstioResource("restrictive_destination_rule.yml");
-//        Thread.sleep(TimeUnit.SECONDS.toMillis(10)); // wait for rule to take effect
+        List <me.snowdrop.istio.api.IstioResource> resource = deployIstioResource("restrictive_destination_rule.yml");
+        Thread.sleep(TimeUnit.SECONDS.toMillis(10)); // wait for rule to take effect
 
         ResponsesCount responsesCount = measureResponses(150);
 
-        // TODO bring back when resource removal actually works
-//        istioAssistant.undeployIstioResources(resource);
+        istioAssistant.undeployIstioResources(resource);
 
         // Assert that there are enough fallback responses in the responses
         assertThat(responsesCount.getPassedResponses())
