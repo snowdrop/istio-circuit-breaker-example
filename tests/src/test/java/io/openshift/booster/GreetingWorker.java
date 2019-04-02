@@ -5,7 +5,7 @@ import io.restassured.response.Response;
 
 import java.net.URL;
 
-public class GreetingAsker extends Thread {
+public class GreetingWorker extends Thread {
     private URL istioIngressGateway;
     private int requestCount;
     private int passedResponses;
@@ -13,7 +13,7 @@ public class GreetingAsker extends Thread {
 
     private int requestDelay;
 
-    public GreetingAsker(String threadName, URL istioIngressGateway, int requestCount) {
+    public GreetingWorker(String threadName, URL istioIngressGateway, int requestCount) {
         super(threadName);
         this.istioIngressGateway=istioIngressGateway;
         passedResponses=0;

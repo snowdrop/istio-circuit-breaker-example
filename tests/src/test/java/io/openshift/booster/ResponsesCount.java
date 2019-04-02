@@ -26,4 +26,8 @@ public class ResponsesCount {
     public int getFallbackResponses() {
         return fallbackResponses;
     }
+
+    public int getTotalResponses(){
+        return passedResponses + fallbackResponses;
+    }
 }
