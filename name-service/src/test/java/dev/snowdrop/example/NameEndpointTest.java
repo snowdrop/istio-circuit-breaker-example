@@ -13,7 +13,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package io.openshift.booster;
+package dev.snowdrop.example;
 
 import static org.hamcrest.core.IsEqual.equalTo;
 

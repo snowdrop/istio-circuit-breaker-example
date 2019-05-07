@@ -130,7 +130,7 @@ objects:
       app: spring-boot-istio-circuit-breaker-greeting
       provider: snowdrop
       version: "BOOSTER_VERSION"
-      group: io.openshift.booster
+      group: dev.snowdrop.example
     name: spring-boot-istio-circuit-breaker-greeting
   spec:
     ports:
@@ -141,7 +141,7 @@ objects:
     selector:
       app: spring-boot-istio-circuit-breaker-greeting
       provider: snowdrop
-      group: io.openshift.booster
+      group: dev.snowdrop.example
 - apiVersion: v1
   kind: DeploymentConfig
   metadata:
@@ -149,7 +149,7 @@ objects:
       app: spring-boot-istio-circuit-breaker-greeting
       provider: snowdrop
       version: "BOOSTER_VERSION"
-      group: io.openshift.booster
+      group: dev.snowdrop.example
     name: spring-boot-istio-circuit-breaker-greeting
   spec:
     replicas: 1
@@ -157,7 +157,7 @@ objects:
     selector:
       app: spring-boot-istio-circuit-breaker-greeting
       provider: snowdrop
-      group: io.openshift.booster
+      group: dev.snowdrop.example
     strategy:
       rollingParams:
         timeoutSeconds: 3600
@@ -170,7 +170,7 @@ objects:
           app: spring-boot-istio-circuit-breaker-greeting
           provider: snowdrop
           version: "BOOSTER_VERSION"
-          group: io.openshift.booster
+          group: dev.snowdrop.example
       spec:
         containers:
         - env:
@@ -222,7 +222,7 @@ objects:
       app: spring-boot-istio-circuit-breaker-greeting
       provider: snowdrop
       version: "BOOSTER_VERSION"
-      group: io.openshift.booster
+      group: dev.snowdrop.example
     name: spring-boot-istio-circuit-breaker-greeting
   spec:
     port:
