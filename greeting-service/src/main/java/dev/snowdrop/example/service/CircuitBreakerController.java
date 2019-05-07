@@ -14,20 +14,26 @@
  * limitations under the License.
  */
 
-package io.openshift.booster;
+package dev.snowdrop.example.service;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
- * Entry point to the application.
+ * Circuit Breaker state controller.
  */
-@SpringBootApplication
-public class BoosterApplication {
+@RestController
+public class CircuitBreakerController {
 
-    public static void main(String[] args) {
-        SpringApplication.run(BoosterApplication.class, args);
+    private NameService nameService;
+
+    public CircuitBreakerController(NameService nameService) {
+        this.nameService = nameService;
+    }
+
+    @RequestMapping("/api/cb-state")
+    public CircuitBreakerState getState() throws Exception {
+        return nameService.getState();
     }
 
 }
-

@@ -1,4 +1,4 @@
-package io.openshift.booster;
+package dev.snowdrop.example;
 
 public class ResponsesCount {
     private int passedResponses;
