@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.openshift.booster.service;
+package dev.snowdrop.example.service;
 
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;

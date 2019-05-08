@@ -13,14 +13,14 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>io.openshift.booster</groupId>
-    <artifactId>spring-boot-istio-circuit-breaker-parent</artifactId>
+    <groupId>dev.snowdrop.example</groupId>
+    <artifactId>istio-circuit-breaker</artifactId>
     <version>1.5.19-3-SNAPSHOT</version>
   </parent>
 
   <artifactId>spring-boot-istio-circuit-breaker-greeting</artifactId>
 
-  <name>Spring Boot - Istio - Circuit Breaker Booster - Greeting Service</name>
+  <name>Spring Boot - Istio - Circuit Breaker Example - Greeting Service</name>
 
   <dependencies>
     <dependency>

@@ -14,19 +14,27 @@
  * limitations under the License.
  */
 
-package io.openshift.booster;
-
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+package dev.snowdrop.example.service;
 
 /**
- * Entry point to the application.
+ * Circuit Breaker state.
  */
-@SpringBootApplication
-public class BoosterApplication {
+public class CircuitBreakerState {
 
-    public static void main(String[] args) {
-        SpringApplication.run(BoosterApplication.class, args);
+    static final CircuitBreakerState OPEN = new CircuitBreakerState("open");
+    static final CircuitBreakerState CLOSED = new CircuitBreakerState("closed");
+
+    private String state;
+
+    public CircuitBreakerState() {
+    }
+
+    public CircuitBreakerState(String state) {
+        this.state = state;
+    }
+
+    public String getState() {
+        return state;
     }
 
 }
