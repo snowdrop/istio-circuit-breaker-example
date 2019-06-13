@@ -15,7 +15,7 @@
   <parent>
     <groupId>dev.snowdrop.example</groupId>
     <artifactId>istio-circuit-breaker</artifactId>
-    <version>1.5.19-4-SNAPSHOT</version>
+    <version>1.5.19-4</version>
   </parent>
 
   <artifactId>spring-boot-istio-circuit-breaker-greeting</artifactId>
