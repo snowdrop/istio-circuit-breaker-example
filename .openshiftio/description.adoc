@@ -1,1 +1,1 @@
-Booster to demonstrate Istio's Circuit Breaker with Spring Boot.
+Example to demonstrate Istio's Circuit Breaker with Spring Boot.
