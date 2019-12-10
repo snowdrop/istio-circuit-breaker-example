@@ -24,7 +24,7 @@
   </parent>
   <groupId>dev.snowdrop.example</groupId>
   <artifactId>istio-circuit-breaker</artifactId>
-  <version>2.1.10-3-SNAPSHOT</version>
+  <version>2.1.10-3</version>
   <packaging>pom</packaging>
   <name>Spring Boot - Istio - Circuit Breaker Example</name>
   <description>Spring Boot - Istio - Circuit Breaker Example</description>
